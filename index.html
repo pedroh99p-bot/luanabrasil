@@ -1,0 +1,1586 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Menu, X, ShoppingBag, ArrowRight, MessageCircle, MapPin, 
+  Instagram, Star, CheckCircle, ChevronDown, ChevronUp,
+  Clock, Shield, Activity, Sparkles, Leaf, Feather, Heart,
+  RotateCcw, Wind, Droplets, Flame, Zap, Sun, Moon, ArrowLeft,
+  ShieldCheck, Lock
+} from 'lucide-react';
+
+// --- CONFIGURAÇÕES GLOBAIS DA MARCA ---
+const GLOBAL = {
+  whatsapp: "5551989458454", 
+  instagram: "https://www.instagram.com/massoterapeuta_lubrasil/", 
+  mapsUrl: "https://maps.app.goo.gl/search/Av.+Gilka+Machado,+02+-+Recreio", 
+  mapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3673.655829910543!2d-43.46995642468165!3d-23.01809057917711!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9bdf11158ba9c1%3A0xc0fb19561cf2b9cc!2sAv.%20Gilka%20Machado%2C%202%20-%20Recreio%20dos%20Bandeirantes%2C%20Rio%20de%20Janeiro%20-%20RJ%2C%2022790-850!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr",
+  images: {
+    texture: "https://res.cloudinary.com/dm9mnc97u/image/upload/v1777694642/35dc67d7-0841-4258-8f28-1cbb026268cb_m5dwqh.png",
+    specialist: "https://res.cloudinary.com/dm9mnc97u/image/upload/v1777694630/0cadc182-6847-4ef1-8b94-07f6d31f22e9_zgqjbn.png",
+    reviewsBg: "https://res.cloudinary.com/dm9mnc97u/image/upload/v1777699184/523f5557-50c2-4e10-be4b-aff3fce3d848_1_rlelpj.png",
+    finalCtaBg: "https://res.cloudinary.com/dm9mnc97u/image/upload/v1777694701/a28da448-0417-43fb-a985-2393ad059c08_jldmbv.png"
+  }
+};
+
+// --- DADOS DOS SERVIÇOS ---
+const SERVICES_DATA = [
+  {
+    category: "Relaxamento e bem-estar",
+    desc: "Para quem precisa desacelerar, aliviar o peso da rotina e reencontrar uma sensação de calma no corpo.",
+    id: "relaxamento-bem-estar",
+    items: [
+      { name: "Massagem Relaxante", duration: "60 a 90 min", icon: <Moon size={22}/>, desc: "Uma experiência de toque suave, ritmo contínuo e ambiente tranquilo para induzir relaxamento profundo.", ind: "Estresse, cansaço, tensão acumulada, sono leve e necessidade de pausa.", ben: "Ajuda o corpo a desacelerar e cria uma sensação de leveza, conforto e presença." }
+    ]
+  },
+  {
+    category: "Leveza e estética",
+    desc: "Para quem busca cuidar do corpo com delicadeza, frequência e um olhar mais estético, sem agressividade.",
+    id: "leveza-estetica-corporal",
+    items: [
+      { name: "Massagem Linfática", duration: "60 min", icon: <Droplets size={22}/>, desc: "Técnica com movimentos suaves e ritmados para auxiliar a circulação linfática e reduzir a sensação de retenção.", ind: "Inchaço, pernas pesadas, retenção de líquidos e sensação de corpo sobrecarregado.", ben: "Ajuda o corpo a se sentir mais leve, solto e confortável." },
+      { name: "Massagem Modeladora", duration: "60 min", icon: <Flame size={22}/>, desc: "Técnica manual mais intensa, voltada ao cuidado com o contorno corporal e ao estímulo da circulação local.", ind: "Quem deseja cuidar da aparência corporal com sessões regulares e acompanhamento.", ben: "Contribui para uma sensação de corpo mais firme, cuidado e definido quando associada a bons hábitos." },
+      { name: "Endermoterapia", duration: "50 min", icon: <Zap size={22}/>, desc: "Técnica estética com equipamento de sucção mecânica, usada como apoio em protocolos corporais.", ind: "Textura da pele, celulite, retenção e protocolos combinados de estética corporal.", ben: "Pode complementar o cuidado estético e potencializar protocolos como modeladora e linfática." }
+    ]
+  },
+  {
+    category: "Cuidado terapêutico",
+    desc: "Para quem sente o corpo rígido, tenso ou sobrecarregado e deseja um atendimento mais direcionado.",
+    id: "cuidado-terapeutico",
+    items: [
+      { name: "Massagem Terapêutica", duration: "60 min", icon: <Sun size={22}/>, desc: "Atendimento manual voltado ao alívio de tensões musculares, conforto corporal e melhora da mobilidade.", ind: "Cervical tensa, lombar sensível, ombros carregados, costas rígidas e desconfortos recorrentes.", ben: "Ajuda a soltar áreas de tensão e devolver mais conforto ao movimento." },
+      { name: "Ventosaterapia", duration: "50 min", icon: <Wind size={22}/>, desc: "Técnica complementar que utiliza pressão negativa para estimular a circulação local e auxiliar na liberação de tensões.", ind: "Pontos de rigidez, sensação de travamento e musculatura sobrecarregada.", ben: "Pode ajudar a reduzir a sensação de peso muscular e ampliar a percepção de soltura corporal." },
+      { name: "Método Thatty Campos", duration: "60 a 90 min", icon: <Star size={22}/>, desc: "Técnica manual com foco em leitura corporal, manipulação miofascial e atendimento personalizado.", ind: "Tensão persistente, sobrecarga muscular e desconfortos que pedem uma abordagem mais profunda.", ben: "Oferece um cuidado mais específico para quem busca precisão, profundidade e atenção individual." }
+    ]
+  },
+  {
+    category: "Recuperação corporal",
+    desc: "Para momentos em que o corpo precisa de atenção especial, técnica e respeito ao próprio ritmo.",
+    id: "recuperacao-corporal",
+    items: [
+      { name: "Massagem Desportiva", duration: "60 min", icon: <Activity size={22}/>, desc: "Massagem voltada ao cuidado muscular de pessoas ativas, ajudando na recuperação e na sensação de soltura após esforço físico.", ind: "Praticantes de atividades físicas, musculatura sobrecarregada e rotina corporal intensa.", ben: "Ajuda o corpo a recuperar melhor e voltar à rotina com mais conforto." },
+      { name: "Pós-operatório", duration: "60 min", icon: <Heart size={22}/>, desc: "Atendimento manual voltado ao cuidado corporal em fase de recuperação, sempre respeitando orientação médica e o momento do corpo.", ind: "Pessoas em recuperação após procedimentos cirúrgicos.", ben: "Auxilia no conforto corporal, na mobilidade e na redução da sensação de inchaço durante a recuperação.", obs: "Serviço realizado somente quando adequado à fase de recuperação e mediante liberação médica." }
+    ]
+  }
+];
+
+// --- HOOKS DE ANIMAÇÃO ---
+function useAnimatedCounter(endValue, duration = 2000, decimals = 0) {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.5 });
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+    let start = 0;
+    const increment = endValue / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= endValue) {
+        clearInterval(timer);
+        setCount(endValue);
+      } else {
+        setCount(start);
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isVisible, endValue, duration]);
+
+  return { count: count.toFixed(decimals), ref };
+}
+
+// Componente Reveal
+function Reveal({ children, delay = 0, className = "" }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const domRef = useRef();
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    if (domRef.current) observer.observe(domRef.current);
+    return () => { if (domRef.current) observer.unobserve(domRef.current); };
+  }, []);
+  
+  return (
+    <div
+      ref={domRef}
+      className={`transition-all duration-[1000ms] ease-out ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      } ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  );
+}
+
+// Elemento Decorativo entre Seções
+function SectionDivider() {
+  return (
+    <div className="flex items-center justify-center py-12 opacity-60">
+      <div className="w-24 h-px bg-gradient-to-r from-transparent to-primary"></div>
+      <Sparkles size={18} className="text-primary mx-4 animate-pulse" />
+      <div className="w-24 h-px bg-gradient-to-l from-transparent to-primary"></div>
+    </div>
+  );
+}
+
+// --- COMPONENTE PRINCIPAL ---
+export default function App() {
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [objectiveText, setObjectiveText] = useState("");
+  
+  const [loading, setLoading] = useState(true);
+  const [fadingOut, setFadingOut] = useState(false);
+
+  useEffect(() => {
+    const fadeTimer = setTimeout(() => {
+      setFadingOut(true);
+    }, 2000); 
+    const unmountTimer = setTimeout(() => {
+      setLoading(false);
+    }, 2500); 
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(unmountTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    document.title = "Luana Brasil Massoterapeuta | Massoterapia no Recreio dos Bandeirantes";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute("content", "Massoterapia no Recreio dos Bandeirantes com atendimento privativo, ambiente acolhedor e serviços de massagem relaxante, linfática, terapêutica e bem-estar.");
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = "description";
+      meta.content = "Massoterapia no Recreio dos Bandeirantes com atendimento privativo, ambiente acolhedor e serviços de massagem relaxante, linfática, terapêutica e bem-estar.";
+      document.head.appendChild(meta);
+    }
+  }, []);
+
+  const addToCart = (service) => {
+    if (!cart.find(item => item.name === service.name)) {
+      setCart([...cart, service]);
+      setIsCartOpen(true);
+    }
+  };
+
+  const removeFromCart = (serviceName) => {
+    setCart(cart.filter(item => item.name !== serviceName));
+  };
+
+  const clearCart = () => setCart([]);
+
+  const generateWhatsAppLink = (text = null) => {
+    const defaultMsg = text || `Olá, Luana! Vim pelo site e montei o meu agendamento com os seguintes serviços:\n\n${cart.map(s => `- ${s.name}`).join('\n')}\n\nO que estou sentindo ou buscando:\n${objectiveText || 'Não informado'}\n\nGostaria de saber os horários disponíveis e qual cuidado você recomenda para mim.`;
+    return `https://wa.me/${GLOBAL.whatsapp}?text=${encodeURIComponent(defaultMsg)}`;
+  };
+
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    setIsCartOpen(false); 
+  };
+
+  return (
+    <div className="font-sans text-stone-800 bg-[#FAFAFA] min-h-screen overflow-x-hidden selection:bg-stone-200">
+      <style>{`
+        :root {
+          --color-primary: #CFA862; 
+          --color-primary-alpha: rgba(207, 168, 98, 0.4);
+          --color-primary-light: rgba(207, 168, 98, 0.15);
+          --color-secondary: #FDFBF7; 
+          --color-accent: #25D366; 
+          --color-dark: #2C2A28; 
+        }
+        
+        body { color: var(--color-dark); }
+        .text-primary { color: var(--color-primary); }
+        .bg-primary { background-color: var(--color-primary); }
+        .bg-secondary { background-color: var(--color-secondary); }
+        .border-primary { border-color: var(--color-primary); }
+        
+        /* Padrões de Fundo Decorativos */
+        .pattern-dots {
+          background-image: radial-gradient(var(--color-primary) 1px, transparent 1px);
+          background-size: 24px 24px;
+        }
+        .pattern-grid {
+          background-image: linear-gradient(var(--color-primary) 1px, transparent 1px),
+                            linear-gradient(90deg, var(--color-primary) 1px, transparent 1px);
+          background-size: 40px 40px;
+        }
+        
+        /* Efeitos Glow CTAs */
+        @keyframes pulse-glow {
+          0%, 100% { box-shadow: 0 0 15px var(--color-primary-alpha); }
+          50% { box-shadow: 0 0 30px var(--color-primary); }
+        }
+        .glow-button {
+          animation: pulse-glow 3s infinite;
+        }
+        
+        @keyframes pulse-glow-wpp {
+          0%, 100% { box-shadow: 0 0 15px rgba(37, 211, 102, 0.4); }
+          50% { box-shadow: 0 0 35px rgba(37, 211, 102, 0.8); }
+        }
+        .glow-wpp {
+          animation: pulse-glow-wpp 3s infinite;
+        }
+
+        .glow-text {
+          text-shadow: 0 0 20px var(--color-primary-alpha);
+        }
+
+        /* Efeito Text Shimmer */
+        .text-shimmer {
+          background: linear-gradient(120deg, #2C2A28 30%, #CFA862 50%, #2C2A28 70%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: textShimmer 4s ease-in-out infinite;
+        }
+        .text-shimmer-white {
+          background: linear-gradient(120deg, #FFFFFF 30%, #CFA862 50%, #FFFFFF 70%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          animation: textShimmer 4s ease-in-out infinite;
+        }
+        @keyframes textShimmer {
+          0% { background-position: -150% center; }
+          100% { background-position: 150% center; }
+        }
+
+        /* Marquee */
+        @keyframes marquee {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes marquee-reverse {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0%); }
+        }
+        .animate-marquee {
+          display: inline-flex;
+          white-space: nowrap;
+          animation: marquee 35s linear infinite;
+        }
+        .animate-marquee-slow {
+          display: inline-flex;
+          white-space: nowrap;
+          animation: marquee 60s linear infinite;
+        }
+        .animate-marquee-reverse {
+          display: inline-flex;
+          white-space: nowrap;
+          animation: marquee-reverse 45s linear infinite;
+        }
+        .marquee-container:hover .animate-marquee,
+        .marquee-container:hover .animate-marquee-slow,
+        .marquee-container:hover .animate-marquee-reverse {
+          animation-play-state: paused;
+        }
+
+        @keyframes progress {
+          0% { width: 0%; }
+          100% { width: 100%; }
+        }
+        .animate-progress {
+          animation: progress 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+          animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAFAFA; }
+        ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #CFA862; }
+      `}</style>
+
+      {/* --- PRELOADER --- */}
+      {loading && (
+        <div className={`fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center transition-opacity duration-500 ease-out ${fadingOut ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="text-center space-y-6 max-w-sm px-6 w-full">
+            <h1 className="text-4xl font-serif font-bold tracking-tight text-stone-900">Luana Brasil</h1>
+            <p className="text-stone-500 font-light text-sm">Preparando um espaço de relaxamento e cuidado para o seu corpo...</p>
+            <div className="w-full h-1 bg-stone-100 rounded-full overflow-hidden">
+              <div className="h-full bg-primary animate-progress"></div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md z-40 border-b border-stone-100 shadow-sm transition-all duration-300">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-[76px] flex items-center justify-between">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo(0, 0)}>
+            <div className="font-serif text-2xl tracking-tight text-stone-900 font-bold hover:text-primary transition-colors">
+              Luana Brasil
+            </div>
+            <div className="hidden md:block w-px h-5 bg-stone-200 mx-3"></div>
+            <div className="hidden md:block text-xs font-medium tracking-widest text-stone-400 uppercase mt-1">
+              Massoterapeuta
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-6">
+            <nav className="hidden lg:flex items-center gap-8 text-sm font-medium text-stone-500">
+              <button onClick={() => scrollTo('identificacao')} className="hover:text-primary transition">Como funciona</button>
+              <button onClick={() => scrollTo('servicos')} className="hover:text-primary transition">Serviços</button>
+              <button onClick={() => scrollTo('avaliacoes')} className="hover:text-primary transition">Avaliações</button>
+              <button onClick={() => scrollTo('localizacao')} className="hover:text-primary transition">Localização</button>
+            </nav>
+            <div className="flex items-center gap-3 lg:border-l lg:border-stone-100 lg:pl-6">
+              <button 
+                onClick={() => setIsCartOpen(true)}
+                className="relative bg-stone-50 hover:bg-stone-100 border border-stone-200 px-4 py-2.5 rounded-xl text-stone-700 transition-colors flex items-center gap-2 group"
+                aria-label="Abrir meu agendamento"
+              >
+                <ShoppingBag size={20} className="text-primary group-hover:scale-110 transition-transform" />
+                <span className="hidden sm:block text-sm font-medium">Meu Agendamento</span>
+                {cart.length > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-pulse">
+                    {cart.length}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="pt-[76px]">
+        <HeroSection />
+        <AuthorityRoller />
+        
+        <Reveal><PainSolutionSection /></Reveal>
+        <SectionDivider />
+        
+        <Reveal><SpecialistSection /></Reveal>
+        <SpecialistRoller />
+        
+        <Reveal><ProcessSection /></Reveal>
+        <SectionDivider />
+        
+        <Reveal><QuizSection onAddToCart={addToCart} setObjectiveText={setObjectiveText} setIsCartOpen={setIsCartOpen} /></Reveal>
+        
+        <Reveal><ServicesSection cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} /></Reveal>
+        
+        <Reveal><ReviewsMarqueeSection /></Reveal>
+        <SectionDivider />
+        
+        <Reveal><FAQSection /></Reveal>
+        
+        <Reveal><LocationSection /></Reveal>
+        
+        <FinalRoller />
+        
+        <Reveal><FinalCTA /></Reveal>
+      </main>
+
+      <Footer />
+
+      <CartDrawer 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        cart={cart}
+        removeFromCart={removeFromCart}
+        clearCart={clearCart}
+        objectiveText={objectiveText}
+        setObjectiveText={setObjectiveText}
+        generateWhatsAppLink={generateWhatsAppLink}
+      />
+      
+      <MobileStickyCTA 
+        cartCount={cart.length} 
+        openCart={() => setIsCartOpen(true)} 
+        generateWhatsAppLink={() => generateWhatsAppLink('Olá, Luana! Gostaria de agendar uma avaliação e saber os horários disponíveis.')}
+      />
+    </div>
+  );
+}
+
+// --- SUB-COMPONENTES ---
+
+function HeroSection() {
+  return (
+    <section 
+      id="hero" 
+      className="relative min-h-[100svh] md:min-h-[85vh] flex items-center bg-stone-100 bg-cover bg-center md:bg-right"
+      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')" }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+      
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 py-20 md:py-24 relative z-10 w-full">
+        <Reveal className="space-y-6 text-left max-w-xl">
+          <span className="inline-block py-1.5 px-4 rounded-xl bg-white border border-stone-200 text-xs font-semibold tracking-wider text-stone-600 uppercase shadow-sm">
+            Massoterapia no Recreio · Atendimento privativo
+          </span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-stone-900 leading-[1.1] tracking-tight">
+            Uma pausa para o seu corpo <span className="text-primary glow-text text-shimmer">voltar a respirar.</span>
+          </h1>
+          <p className="text-lg text-stone-600 font-light leading-relaxed">
+            Massoterapia em ambiente acolhedor e elegante no Recreio dos Bandeirantes, com atendimento personalizado para quem busca relaxamento, leveza, equilíbrio e cuidado de verdade.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <a 
+              href={`https://wa.me/${GLOBAL.whatsapp}?text=${encodeURIComponent('Olá, Luana! Gostaria de agendar uma avaliação e saber os horários disponíveis.')}`}
+              target="_blank" rel="noopener noreferrer"
+              className="bg-[#25D366] hover:bg-[#20bd5a] text-white px-8 py-4 rounded-xl font-medium text-lg transition-all flex items-center justify-center gap-2 glow-wpp"
+            >
+              <MessageCircle size={20} />
+              Quero agendar
+            </a>
+            <button 
+              onClick={() => document.getElementById('servicos').scrollIntoView({ behavior: 'smooth' })}
+              className="bg-white/80 backdrop-blur-sm hover:bg-white text-stone-800 border border-stone-300 hover:border-primary px-8 py-4 rounded-xl font-medium text-lg transition-all flex items-center justify-center gap-2"
+            >
+              Ver serviços disponíveis
+            </button>
+          </div>
+
+          <p className="text-xs text-stone-500 font-light tracking-wide mt-4">
+            Atendimento privativo · Sala 304 · Av. Gilka Machado · Recreio dos Bandeirantes
+          </p>
+
+          <div className="flex flex-wrap gap-5 pt-6 text-stone-600 text-sm font-medium border-t border-stone-200/50 mt-6">
+            <div className="flex items-center gap-1.5"><Shield size={16} className="text-primary"/> Ambiente seguro</div>
+            <div className="flex items-center gap-1.5"><Star size={16} className="text-primary"/> Atendimento individual</div>
+            <div className="flex items-center gap-1.5"><Sparkles size={16} className="text-primary"/> Experiência sensorial</div>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function AuthorityRoller() {
+  const items = [
+    "Bem-estar e autocuidado",
+    "Relaxamento profundo",
+    "Leveza para a rotina",
+    "Toque terapêutico e acolhimento",
+    "Equilíbrio físico e emocional"
+  ];
+  
+  return (
+    <section className="bg-stone-900 border-b border-primary/30 text-white py-4 overflow-hidden marquee-container">
+      <div className="animate-marquee px-8 items-center gap-16">
+        {[...items, ...items, ...items].map((item, index) => (
+          <div key={index} className="flex items-center gap-3 text-sm font-light tracking-widest uppercase text-stone-200">
+            <Sparkles size={14} className="text-primary" />
+            {item}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PainSolutionSection() {
+  const cards = [
+    { id: 1, icon: <Activity size={32} className="text-red-400"/>, pain: "Mente Acelerada", subtext: "Dificuldade para relaxar", solution: "Uma pausa real para silenciar a mente e aliviar a tensão profunda acumulada no dia a dia.", cta: "Quero relaxar" },
+    { id: 2, icon: <Clock size={32} className="text-red-400"/>, pain: "Tensão Muscular", subtext: "Costas e ombros travados", solution: "Foco em destravar ombros, cervical e lombar, devolvendo a mobilidade e o conforto.", cta: "Aliviar minhas dores" },
+    { id: 3, icon: <Feather size={32} className="text-red-400"/>, pain: "Sensação de peso", subtext: "Pernas cansadas e inchaço", solution: "Estímulos suaves para melhorar a circulação, reduzindo a sensação de retenção.", cta: "Reduzir o inchaço" },
+    { id: 4, icon: <Heart size={32} className="text-red-400"/>, pain: "Recuperação", subtext: "Apoio corporal focado", solution: "Cuidado focado para quem treina pesado ou está precisando de suporte pós-operatório seguro.", cta: "Cuidar do corpo" }
+  ];
+
+  const [flipped, setFlipped] = useState(null);
+
+  return (
+    <section 
+      id="identificacao" 
+      className="py-16 md:py-24 px-5 sm:px-6 bg-white relative"
+    >
+      <div 
+        className="absolute inset-0 opacity-[0.03] z-0 pointer-events-none" 
+        style={{ backgroundImage: `url(${GLOBAL.images.texture})`, backgroundRepeat: 'repeat' }}
+      ></div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <Reveal className="text-center mb-12 md:mb-16 space-y-4">
+          <span className="text-primary font-semibold tracking-wider text-sm uppercase">Seu corpo também pede pausa</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-stone-900 tracking-tight">
+            Quando a rotina pesa, o corpo sente primeiro.
+          </h2>
+          <p className="text-stone-500 max-w-3xl mx-auto text-lg font-light leading-relaxed">
+            Ombros tensos, pernas pesadas, mente acelerada e aquela sensação de estar sempre carregando mais do que deveria. A massoterapia é um convite para desacelerar.
+          </p>
+        </Reveal>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {cards.map((card, idx) => (
+            <Reveal key={card.id} delay={idx * 100}>
+              <div 
+                className="h-[320px] perspective-1000 cursor-pointer group"
+                onClick={() => setFlipped(flipped === card.id ? null : card.id)}
+                onMouseEnter={() => setFlipped(card.id)}
+                onMouseLeave={() => setFlipped(null)}
+              >
+                <div className={`relative w-full h-full transition-transform duration-700 transform-style-3d ${flipped === card.id ? 'rotate-y-180' : ''}`}>
+                  
+                  {/* Front */}
+                  <div className="absolute inset-0 backface-hidden bg-red-50/30 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm hover:shadow-md transition-all">
+                    <div className="mb-4 bg-white shadow-sm p-4 rounded-full">{card.icon}</div>
+                    <h3 className="text-2xl font-serif font-bold text-stone-900 leading-tight">{card.pain}</h3>
+                    <p className="text-sm text-red-500 mt-2 font-medium bg-white px-3 py-1 rounded-full shadow-sm">{card.subtext}</p>
+                    <div className="mt-auto pt-6 text-red-400 text-[10px] uppercase tracking-widest font-bold flex items-center gap-1.5 opacity-70">
+                      <RotateCcw size={12}/> Toque para virar
+                    </div>
+                  </div>
+
+                  {/* Back */}
+                  <div className="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10">
+                      {React.cloneElement(card.icon, { size: 120, className: 'text-emerald-500' })}
+                    </div>
+                    <div className="relative z-10 flex flex-col h-full w-full">
+                       <div className="mb-4 opacity-70 bg-white p-3 rounded-full w-14 h-14 flex items-center justify-center mx-auto shadow-sm">
+                         {React.cloneElement(card.icon, { size: 24, className: 'text-emerald-600' })}
+                       </div>
+                       <p className="text-emerald-900 font-medium mb-8 text-sm md:text-base leading-relaxed">{card.solution}</p>
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); document.getElementById('servicos').scrollIntoView({ behavior: 'smooth' }); }}
+                         className="bg-emerald-600 text-white px-5 py-3 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20"
+                       >
+                         {card.cta}
+                       </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        
+        <Reveal delay={600} className="mt-16 text-center">
+          <button 
+            onClick={() => document.getElementById('quiz').scrollIntoView({ behavior: 'smooth' })}
+            className="inline-flex bg-stone-900 hover:bg-stone-800 text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors shadow-md glow-button"
+          >
+            Quero entender qual cuidado combina comigo
+          </button>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function SpecialistSection() {
+  const yearsCounter = useAnimatedCounter(10, 2000); 
+  const clientsCounter = useAnimatedCounter(500, 2500); 
+  const googleCounter = useAnimatedCounter(5, 2000, 1); // 5.0
+
+  return (
+    <section id="sobre" className="py-16 md:py-24 bg-stone-900 text-white relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+        
+        <Reveal delay={200} className="order-2 md:order-1 relative max-w-md mx-auto w-full">
+           <div className="aspect-[3/4] rounded-2xl overflow-hidden border-4 border-stone-800 shadow-2xl bg-stone-800 flex items-center justify-center relative">
+             <img 
+               src={GLOBAL.images.specialist} 
+               alt="Luana Brasil Massoterapeuta" 
+               className="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity"
+               loading="lazy"
+             />
+             <div className="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-transparent to-transparent"></div>
+           </div>
+        </Reveal>
+        
+        <Reveal className="space-y-6 order-1 md:order-2">
+          <span className="text-primary font-bold tracking-widest text-sm uppercase">A Especialista</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight tracking-tight">
+            Luana Brasil
+          </h2>
+          <div className="text-stone-300 font-light text-lg leading-relaxed">
+            <p>
+              Com atendimento exclusivo no Recreio dos Bandeirantes, Luana oferece uma experiência onde a técnica profunda e a escuta ativa caminham juntas. O foco de cada sessão não é aplicar um protocolo engessado, mas entregar um cuidado personalizado e acolhedor que alivia dores reais, reduz o estresse acumulado e devolve a leveza e a mobilidade que a sua rotina exige.
+            </p>
+          </div>
+          
+          <ul className="space-y-3 pt-4">
+            {[
+              "Atendimento privativo, seguro e acolhedor",
+              "Escuta ativa antes da aplicação da técnica",
+              "Experiência sensorial completa de bem-estar"
+            ].map((point, idx) => (
+              <li key={idx} className="flex items-center gap-3">
+                <CheckCircle size={20} className="text-primary shrink-0"/>
+                <span className="text-stone-200 font-medium">{point}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="grid grid-cols-3 gap-4 pt-6 border-t border-stone-800 mt-6">
+            <div>
+               <div className="text-3xl lg:text-4xl font-serif text-primary mb-1 flex items-baseline gap-1">
+                 <span ref={yearsCounter.ref}>{yearsCounter.count}</span>+
+               </div>
+               <p className="text-xs font-light text-stone-400">Anos de prática</p>
+            </div>
+            <div>
+               <div className="text-3xl lg:text-4xl font-serif text-primary mb-1 flex items-baseline gap-1">
+                 <span ref={clientsCounter.ref}>{clientsCounter.count}</span>+
+               </div>
+               <p className="text-xs font-light text-stone-400">Vidas impactadas</p>
+            </div>
+            <div>
+               <div className="text-3xl lg:text-4xl font-serif text-primary mb-1 flex items-baseline gap-1">
+                 <span ref={googleCounter.ref}>{googleCounter.count}</span><Star size={16} fill="currentColor" className="ml-1"/>
+               </div>
+               <p className="text-xs font-light text-stone-400">34+ avaliações (Google)</p>
+            </div>
+          </div>
+
+          <div className="pt-6">
+             <a 
+              href={`https://wa.me/${GLOBAL.whatsapp}?text=${encodeURIComponent('Olá, Luana! Gostaria de conversar sobre um atendimento.')}`}
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-bold transition-colors items-center gap-2 glow-button"
+            >
+              <MessageCircle size={20}/>
+              Conversar com a Luana
+            </a>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function SpecialistRoller() {
+  const items = [
+    "Especialista em Massoterapia",
+    "Acolhimento Sensorial",
+    "Escuta Ativa",
+    "Toque Terapêutico Premium",
+    "Alívio e Leveza",
+    "Cuidado Personalizado"
+  ];
+  
+  return (
+    <section className="bg-primary text-white py-4 overflow-hidden marquee-container border-y border-white/20 shadow-inner">
+      <div className="animate-marquee-reverse px-8 items-center gap-12">
+        {[...items, ...items, ...items].map((item, index) => (
+          <div key={index} className="flex items-center gap-3 text-sm md:text-base font-bold tracking-widest uppercase text-stone-50">
+            <Sparkles size={16} className="text-white/70" />
+            {item}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProcessSection() {
+  const steps = [
+    { num: "01", title: "Você chama no WhatsApp", desc: "Conte o que está sentindo ou qual experiência procura." },
+    { num: "02", title: "Luana entende seu momento", desc: "Antes de indicar qualquer serviço, ela escuta sua necessidade." },
+    { num: "03", title: "Você agenda seu horário", desc: "O atendimento é individual, privativo e com hora marcada." },
+    { num: "04", title: "Sua sessão vira pausa real", desc: "Um momento para desacelerar e receber cuidado com presença." }
+  ];
+
+  return (
+    <section id="como_funciona" className="py-16 md:py-24 bg-stone-50 border-t border-stone-200 relative overflow-hidden">
+      {/* Pattern de fundo pontilhado suave */}
+      <div className="absolute inset-0 opacity-[0.05] pattern-dots pointer-events-none"></div>
+      
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 relative z-10">
+        <Reveal className="text-center mb-12 md:mb-20 space-y-4">
+          <span className="text-primary font-semibold tracking-wider text-sm uppercase">Como funciona</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight">
+            Do primeiro contato à sessão, tudo com calma.
+          </h2>
+        </Reveal>
+
+        <div className="grid md:grid-cols-4 gap-8 relative">
+          {/* Linha conectora apenas no desktop */}
+          <div className="hidden md:block absolute top-10 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent -z-0"></div>
+
+          {steps.map((step, idx) => (
+            <Reveal key={idx} delay={idx * 150} className="relative z-10 flex flex-col items-center text-center">
+              <div className="w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-primary mb-6 shadow-sm hover:shadow-md transition-shadow">
+                {step.num}
+              </div>
+              <h3 className="text-lg font-bold text-stone-900 mb-3 px-2">{step.title}</h3>
+              <p className="text-stone-500 font-light leading-relaxed text-sm">{step.desc}</p>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function QuizSection({ onAddToCart, setObjectiveText, setIsCartOpen }) {
+  const [step, setStep] = useState(1);
+  const [answers, setAnswers] = useState({});
+  
+  const questions = [
+    {
+      text: "Como você descreveria o seu principal desconforto hoje?",
+      options: [
+        { text: "🎈 Sensação de inchaço ou pernas pesadas", mapsTo: "Massagem Linfática" },
+        { text: "⚡ Costas tensas e ombros travados", mapsTo: "Massagem Terapêutica" },
+        { text: "🧠 Estresse geral e cansaço mental", mapsTo: "Massagem Relaxante" },
+        { text: "👗 Desejo de cuidar do contorno do corpo", mapsTo: "Massagem Modeladora" }
+      ]
+    },
+    {
+      text: "Que tipo de ritmo e toque você prefere?",
+      options: [
+        { text: "🍃 Ritmo lento, toque suave e acolhedor", mapsTo: "Massagem Relaxante" },
+        { text: "🌊 Moderado para estimular e drenar", mapsTo: "Massagem Linfática" },
+        { text: "⛰️ Toque firme para soltar a musculatura", mapsTo: "Massagem Terapêutica" },
+        { text: "🎯 Abordagem profunda, técnica e focada", mapsTo: "Método Thatty Campos" }
+      ]
+    },
+    {
+      text: "O que você mais deseja sentir ao final da sessão?",
+      options: [
+        { text: "🧘‍♀️ Mente quieta e corpo descansado", mapsTo: "Massagem Relaxante" },
+        { text: "🤸‍♀️ Músculos soltos e sem áreas de dor", mapsTo: "Massagem Terapêutica" },
+        { text: "☁️ Leveza corporal e sem retenção", mapsTo: "Massagem Linfática" }
+      ]
+    },
+    {
+      text: "Qual nível de dor ou tensão você sente agora (0 a 10)?",
+      options: [
+        { text: "🌿 Nenhuma, quero apenas relaxar e cuidar", mapsTo: "Massagem Relaxante" },
+        { text: "🟡 Leve, um pequeno incômodo no fim do dia", mapsTo: "Massagem Linfática" },
+        { text: "🟠 Moderada, já atrapalha um pouco a rotina", mapsTo: "Massagem Terapêutica" },
+        { text: "🔴 Intensa, estou com o corpo travado", mapsTo: "Método Thatty Campos" }
+      ]
+    },
+    {
+      text: "Qual frequência de cuidado você tem em mente?",
+      options: [
+        { text: "⏳ Uma pausa pontual, preciso para hoje", mapsTo: "Massagem Relaxante" },
+        { text: "🗓️ Cuidado frequente e manutenção", mapsTo: "Massagem Linfática" },
+        { text: "🎯 Tratamento focado até resolver a queixa", mapsTo: "Massagem Terapêutica" }
+      ]
+    }
+  ];
+
+  const handleAnswer = (option) => {
+    const newAnswers = { ...answers, [step]: option };
+    setAnswers(newAnswers);
+    
+    if (step === questions.length) {
+       const summary = `*Minhas respostas do Guia Rápido:*\n1. Desconforto: ${newAnswers[1].text}\n2. Toque: ${newAnswers[2].text}\n3. Desejo final: ${newAnswers[3].text}\n4. Nível de tensão: ${newAnswers[4].text}\n5. Frequência: ${newAnswers[5].text}`;
+       setObjectiveText(summary);
+    }
+    
+    setStep(step + 1);
+  };
+
+  const goBack = () => {
+    if(step > 1) setStep(step - 1);
+  };
+
+  const getRecommendations = () => {
+    const recs = Object.values(answers).map(a => a.mapsTo);
+    const uniqueRecs = [...new Set(recs)].slice(0, 3);
+    const fullServices = [];
+    SERVICES_DATA.forEach(category => {
+      category.items.forEach(item => {
+        if (uniqueRecs.includes(item.name)) {
+          fullServices.push(item);
+        }
+      });
+    });
+    return fullServices;
+  };
+
+  const addAllRecommendations = () => {
+    const recs = getRecommendations();
+    recs.forEach(service => onAddToCart(service));
+    setIsCartOpen(true);
+  };
+
+  return (
+    <section id="quiz" className="py-16 md:py-24 bg-white border-y border-stone-200 relative">
+      <div 
+        className="absolute inset-0 opacity-[0.02] z-0 pointer-events-none" 
+        style={{ backgroundImage: `url(${GLOBAL.images.texture})`, backgroundRepeat: 'repeat' }}
+      ></div>
+
+      <div className="max-w-3xl mx-auto px-5 sm:px-6 relative z-10">
+        
+        {step <= questions.length && (
+          <div className="bg-white p-6 md:p-12 rounded-3xl shadow-lg shadow-stone-200/50 border border-stone-100">
+            <div className="mb-8 relative">
+              {step > 1 && (
+                <button onClick={goBack} className="absolute left-0 top-1/2 -translate-y-1/2 text-stone-400 hover:text-primary transition-colors flex items-center gap-1 text-sm font-medium">
+                  <ArrowLeft size={16}/> Voltar
+                </button>
+              )}
+              <div className="text-center text-xs text-stone-400 mb-3 font-bold uppercase tracking-widest">
+                <span>Pergunta {step} de {questions.length}</span>
+              </div>
+              <div className="w-full max-w-xs mx-auto bg-stone-100 h-1.5 rounded-full overflow-hidden">
+                <div 
+                  className="bg-primary h-full transition-all duration-500 ease-out"
+                  style={{ width: `${(step / questions.length) * 100}%` }}
+                ></div>
+              </div>
+            </div>
+
+            <h3 className="text-2xl md:text-3xl font-serif font-bold text-stone-900 mb-10 text-center leading-relaxed">
+              {questions[step - 1].text}
+            </h3>
+
+            <div className="space-y-3 md:space-y-4">
+              {questions[step - 1].options.map((opt, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleAnswer(opt)}
+                  className="w-full text-left p-4 md:p-5 rounded-xl border bg-stone-50/50 border-stone-200 hover:border-primary hover:bg-white hover:shadow-md transition-all font-medium text-stone-700 text-base md:text-lg"
+                >
+                  {opt.text}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {step > questions.length && (
+          <div className="bg-white p-6 md:p-12 rounded-3xl shadow-lg border border-stone-100 text-center animate-fade-in-up">
+            <div className="w-16 h-16 md:w-20 md:h-20 bg-secondary text-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-stone-200">
+              <Sparkles size={36}/>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Seu resumo está pronto</h2>
+            <p className="text-stone-500 mb-8 max-w-lg mx-auto font-light text-lg">Suas respostas já foram salvas. Baseado no seu momento atual, estes são os cuidados que vão ajudar seu corpo a reencontrar o equilíbrio.</p>
+            
+            <div className="bg-secondary/50 p-6 md:p-8 rounded-2xl text-left mb-10 border border-stone-200">
+              <p className="text-xs font-bold tracking-wider text-stone-500 uppercase mb-4">Sugestões de cuidado:</p>
+              <div className="space-y-4">
+                 {getRecommendations().map((rec, idx) => (
+                   <div key={idx} className="flex items-center gap-3 bg-white p-4 rounded-xl shadow-sm">
+                     <div className="p-2 bg-secondary text-primary rounded-lg">{rec.icon}</div>
+                     <span className="font-bold text-stone-800 text-lg">{rec.name}</span>
+                   </div>
+                 ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={addAllRecommendations}
+                className="bg-stone-900 hover:bg-stone-800 text-white px-8 py-4 rounded-xl font-bold transition-colors shadow-md glow-button"
+              >
+                Adicionar ao meu agendamento
+              </button>
+              <button 
+                onClick={() => document.getElementById('servicos').scrollIntoView({ behavior: 'smooth' })}
+                className="bg-white hover:bg-stone-50 text-stone-800 border border-stone-300 px-8 py-4 rounded-xl font-bold transition-colors"
+              >
+                Ver todos os serviços
+              </button>
+            </div>
+            <button onClick={() => {setStep(1); setAnswers({});}} className="mt-8 text-sm text-stone-400 hover:text-primary transition-colors font-medium">
+              <RotateCcw size={14} className="inline mr-1"/> Refazer guia
+            </button>
+          </div>
+        )}
+
+      </div>
+    </section>
+  );
+}
+
+function ServicesSection({ cart, addToCart, removeFromCart }) {
+  const [activeTab, setActiveTab] = useState(SERVICES_DATA[0].id);
+  const activeCategory = SERVICES_DATA.find(c => c.id === activeTab);
+
+  return (
+    <section id="servicos" className="py-16 md:py-24 bg-white relative overflow-hidden scroll-mt-20">
+      <div 
+        className="absolute inset-0 opacity-[0.04] z-0 pointer-events-none" 
+        style={{ 
+          backgroundImage: `url(${GLOBAL.images.texture})`, 
+          backgroundSize: 'cover',
+          backgroundPosition: 'top center'
+        }}
+      ></div>
+      
+      {/* Decorative Dotted Shapes */}
+      <div className="absolute -left-12 top-40 w-64 h-64 pattern-dots opacity-[0.05] rounded-full pointer-events-none hidden lg:block"></div>
+      <div className="absolute -right-12 bottom-20 w-80 h-80 pattern-dots opacity-[0.05] rounded-full pointer-events-none hidden lg:block"></div>
+
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 relative z-10">
+        <Reveal className="text-center mb-10 md:mb-12 space-y-4">
+          <span className="text-primary font-semibold tracking-wider text-sm uppercase">Serviços e Valores</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-stone-900 tracking-tight">
+            Monte o seu agendamento ideal.
+          </h2>
+          <p className="text-stone-500 max-w-2xl mx-auto text-base md:text-lg font-light leading-relaxed">
+            Selecione a categoria e adicione os serviços de interesse. Ao final, envie tudo pelo WhatsApp para que a Luana reserve seu horário e valide a melhor opção.
+          </p>
+        </Reveal>
+
+        {/* Tabs de Categoria */}
+        <Reveal delay={200} className="flex overflow-x-auto pb-6 mb-4 md:mb-8 -mx-5 px-5 sm:mx-0 sm:px-0 hide-scrollbar justify-start sm:justify-center gap-3">
+          {SERVICES_DATA.map(category => (
+            <button
+              key={category.id}
+              onClick={() => setActiveTab(category.id)}
+              className={`whitespace-nowrap px-5 md:px-6 py-3.5 rounded-xl font-bold text-sm transition-all border ${
+                activeTab === category.id 
+                  ? 'bg-primary text-white border-primary shadow-md glow-button' 
+                  : 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50 hover:border-stone-300'
+              }`}
+            >
+              {category.category}
+            </button>
+          ))}
+        </Reveal>
+
+        {/* Conteúdo da Categoria Ativa */}
+        <div key={activeCategory.id} className="animate-fade-in-up space-y-8 min-h-[400px]">
+          <div className="text-center mb-10 max-w-2xl mx-auto">
+             <p className="text-stone-500 font-light text-lg">{activeCategory.desc}</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {activeCategory.items.map((service, idx) => {
+              const inCart = cart.some(item => item.name === service.name);
+              return (
+                <div key={idx} className={`bg-white border rounded-2xl p-8 shadow-sm transition-all flex flex-col h-full ${inCart ? 'border-primary ring-1 ring-primary/30 shadow-md bg-stone-50/30' : 'border-stone-200 hover:shadow-md hover:border-stone-300'}`}>
+                  <div className="flex-grow">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-secondary rounded-xl text-primary shadow-sm">
+                          {service.icon}
+                        </div>
+                        <h4 className="text-xl font-bold text-stone-900">{service.name}</h4>
+                      </div>
+                      {inCart && <CheckCircle size={22} className="text-primary animate-fade-in-up flex-shrink-0" />}
+                    </div>
+                    
+                    <p className="text-sm text-stone-600 mb-5 flex items-center gap-1.5 font-bold bg-stone-100 inline-flex px-3 py-1.5 rounded-md">
+                      <Clock size={14}/> {service.duration}
+                    </p>
+                    <p className="text-stone-600 font-light text-sm mb-6 leading-relaxed">
+                      {service.desc}
+                    </p>
+                    
+                    <div className="space-y-4 mb-8">
+                      <div>
+                        <p className="text-[11px] font-bold text-stone-400 uppercase tracking-widest mb-1">Indicação</p>
+                        <p className="text-sm text-stone-700 leading-relaxed">{service.ind}</p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-bold text-stone-400 uppercase tracking-widest mb-1">O que você sente</p>
+                        <p className="text-sm text-stone-700 leading-relaxed">{service.ben}</p>
+                      </div>
+                      {service.obs && (
+                         <div className="bg-secondary p-3 rounded-xl border border-stone-200">
+                           <p className="text-xs text-stone-500 italic">{service.obs}</p>
+                         </div>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <button 
+                      onClick={() => inCart ? removeFromCart(service.name) : addToCart(service)}
+                      className={`w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
+                        inCart 
+                          ? 'bg-secondary text-stone-700 border border-stone-200 hover:bg-stone-200' 
+                          : 'bg-stone-900 text-white hover:bg-stone-800 shadow-sm hover:shadow-md'
+                      }`}
+                    >
+                      {inCart ? (
+                        'Remover do Agendamento' 
+                      ) : (
+                        <>
+                          <ShoppingBag size={18} /> Adicionar
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CartDrawer({ isOpen, onClose, cart, removeFromCart, clearCart, objectiveText, setObjectiveText, generateWhatsAppLink }) {
+  
+  const handleExplore = () => {
+    onClose();
+    setTimeout(() => {
+      const el = document.getElementById('servicos');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+  };
+
+  return (
+    <>
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 transition-opacity"
+          onClick={onClose}
+        />
+      )}
+      
+      <div className={`fixed top-0 right-0 h-full w-full sm:w-[450px] bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        
+        <div className="px-6 py-5 border-b border-stone-100 flex items-center justify-between bg-white">
+          <h2 className="text-lg font-serif font-bold text-stone-900 flex items-center gap-2">
+            <ShoppingBag size={20} className="text-primary"/>
+            Meu Agendamento
+          </h2>
+          <button onClick={onClose} className="p-2 text-stone-400 hover:text-stone-700 bg-stone-50 rounded-xl border border-stone-100 transition-colors">
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6 bg-secondary/30 relative">
+          {/* Subtle dotted background inside cart */}
+          <div className="absolute inset-0 opacity-[0.05] pattern-dots pointer-events-none"></div>
+
+          {cart.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center text-stone-400 space-y-4 px-4 relative z-10">
+              <div className="w-20 h-20 bg-white shadow-sm rounded-full flex items-center justify-center mb-2">
+                <ShoppingBag size={32} className="text-stone-300" />
+              </div>
+              <p className="font-light leading-relaxed">Nenhum serviço selecionado ainda. Adicione as opções de interesse para montar seu resumo.</p>
+              <button onClick={handleExplore} className="text-stone-900 font-bold border-b border-stone-900 pb-1 hover:text-primary hover:border-primary transition-colors cursor-pointer">
+                Explorar serviços
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-6 relative z-10">
+              <div className="flex justify-between items-center pb-3 border-b border-stone-200">
+                <span className="text-sm font-bold text-stone-700 uppercase tracking-wider">Itens Selecionados</span>
+                <button onClick={clearCart} className="text-xs text-stone-400 hover:text-red-500 font-bold transition-colors">Limpar seleção</button>
+              </div>
+              
+              <ul className="space-y-3">
+                {cart.map((item, idx) => (
+                  <li key={idx} className="flex justify-between items-center bg-white p-4 rounded-xl border border-stone-200 shadow-sm animate-fade-in-up" style={{ animationDelay: `${idx * 100}ms` }}>
+                    <div>
+                      <p className="font-bold text-stone-800">{item.name}</p>
+                      <p className="text-xs text-stone-500 mt-0.5">{item.duration}</p>
+                    </div>
+                    <button 
+                      onClick={() => removeFromCart(item.name)}
+                      className="text-stone-400 hover:text-red-500 p-2 transition-colors flex items-center gap-1 text-xs font-bold bg-stone-50 rounded-lg"
+                    >
+                      Remover
+                    </button>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="pt-6 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
+                <label htmlFor="objective" className="block text-sm font-bold text-stone-800 mb-3">
+                  Conte o que você está sentindo ou buscando:
+                </label>
+                <textarea 
+                  id="objective"
+                  value={objectiveText}
+                  onChange={(e) => setObjectiveText(e.target.value)}
+                  placeholder="Ex: quero relaxar, sinto tensão nas costas, estou inchada, busco modeladora..."
+                  className="w-full border border-stone-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none h-48 bg-white placeholder:text-stone-300 font-light"
+                ></textarea>
+                <p className="text-[10px] text-stone-400 mt-2">*Se você preencheu o Guia Rápido, suas respostas já estão aqui.</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="p-6 border-t border-stone-100 bg-white">
+          <a 
+            href={cart.length > 0 ? generateWhatsAppLink() : '#'}
+            target="_blank" rel="noopener noreferrer"
+            onClick={(e) => {
+              if (cart.length === 0) e.preventDefault();
+            }}
+            className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all ${
+              cart.length > 0 
+                ? 'bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-lg shadow-[#25D366]/20 glow-wpp' 
+                : 'bg-stone-100 text-stone-400 cursor-not-allowed'
+            }`}
+          >
+            <MessageCircle size={20} />
+            Enviar agendamento para Luana
+          </a>
+          <p className="text-center text-xs text-stone-400 mt-4 font-light">O envio serve apenas para alinhar a marcação. Nenhum pagamento é feito aqui.</p>
+        </div>
+
+      </div>
+    </>
+  );
+}
+
+// SVG do Google Icon
+const GoogleIcon = () => (
+  <svg className="w-5 h-5 flex-shrink-0 bg-white rounded-full p-0.5 shadow-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+  </svg>
+);
+
+function ReviewsMarqueeSection() {
+  const reviews = [
+    { name: "Mariana S.", text: "Uma pausa necessária! O ambiente é super acolhedor e a Luana tem mãos maravilhosas. Saí me sentindo muito mais leve e sem as tensões das costas." },
+    { name: "Camila T.", text: "Faço a linfática toda semana e a diferença na retenção de líquido é incrível. Além disso, é o meu momento de relaxar a mente e fugir da rotina." },
+    { name: "Juliana M.", text: "A melhor massagem do Recreio! A escuta dela faz toda a diferença, o atendimento não é engessado, ela adapta para o que o corpo precisa." },
+    { name: "Fernanda R.", text: "Experiência sensacional do início ao fim. O ambiente te desliga do mundo lá fora e a técnica me ajudou muito com as dores da cervical." },
+    { name: "Beatriz N.", text: "Simplesmente impecável. O cuidado, os aromas, a maca super confortável. O método dela de desportiva me recuperou pro treino no dia seguinte." }
+  ];
+
+  return (
+    <section id="avaliacoes" className="py-16 md:py-24 bg-stone-900 overflow-hidden border-t border-primary/20 relative">
+      
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 text-center mb-12 md:mb-14 relative z-10">
+        <div className="space-y-4">
+          <span className="text-primary font-semibold tracking-wider text-sm uppercase">Avaliações</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight">
+            Quem vive a experiência sente a diferença.
+          </h2>
+          <p className="text-stone-400 font-light text-lg">Depoimentos reais de quem encontrou bem-estar nas mãos da Luana.</p>
+        </div>
+      </div>
+
+      <div className="marquee-container w-full overflow-hidden relative pb-8">
+        <div className="absolute inset-y-0 left-0 w-12 md:w-32 bg-gradient-to-r from-stone-900 to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute inset-y-0 right-0 w-12 md:w-32 bg-gradient-to-l from-stone-900 to-transparent z-10 pointer-events-none"></div>
+        
+        <div className="animate-marquee-slow flex items-stretch gap-6 px-4">
+          {[...reviews, ...reviews, ...reviews].map((rev, idx) => (
+            <div 
+              key={idx} 
+              className="w-[320px] md:w-[420px] h-auto flex-shrink-0 bg-cover bg-center rounded-2xl relative flex flex-col shadow-xl border border-stone-800 whitespace-normal"
+              style={{ backgroundImage: `url(${GLOBAL.images.reviewsBg})` }}
+            >
+              <div className="absolute inset-0 bg-stone-900/70 mix-blend-multiply rounded-2xl"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/60 to-transparent rounded-2xl"></div>
+              
+              <div className="relative z-10 p-6 md:p-8 flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex gap-1 text-primary">
+                      {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
+                    </div>
+                    <GoogleIcon />
+                  </div>
+                  <p className="text-white font-light leading-relaxed mb-6 italic text-sm md:text-base break-words">"{rev.text}"</p>
+                </div>
+                <div className="flex items-center gap-3 mt-auto pt-4">
+                  <div className="w-10 h-10 rounded-full bg-white text-stone-900 flex items-center justify-center font-bold font-serif shadow-md shrink-0">
+                    {rev.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-sm">{rev.name}</p>
+                    <p className="text-[10px] text-stone-400 font-bold tracking-wider uppercase">Avaliação verificada</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-8 text-center relative z-10">
+        <a 
+          href={GLOBAL.mapsUrl}
+          target="_blank" rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-stone-400 font-bold hover:text-white transition-colors border-b border-stone-700 hover:border-white pb-1"
+        >
+          Ver mais avaliações no Google <ArrowRight size={16}/>
+        </a>
+      </div>
+    </section>
+  );
+}
+
+function FAQSection() {
+  const faqs = [
+    { q: "Nunca fiz massoterapia. Como sei qual serviço escolher?", a: "Você não precisa decidir sozinha. Adicione as opções que te chamam a atenção ao seu agendamento, ou chame a Luana pelo WhatsApp contando o que está sentindo. Ela orienta o melhor caminho." },
+    { q: "A sessão é mais relaxante ou terapêutica?", a: "Depende do seu objetivo. Algumas sessões são mais suaves e voltadas ao relaxamento. Outras são mais direcionadas ao alívio de tensão, recuperação ou estética corporal." },
+    { q: "Posso escolher mais de um serviço?", a: "Sim. Você pode selecionar mais de um serviço no site e enviar seu resumo pelo WhatsApp. Luana avalia se a combinação faz sentido para o seu momento." },
+    { q: "Pós-operatório precisa de liberação médica?", a: "Sim, quando necessário. O atendimento pós-operatório respeita a fase de recuperação, as orientações médicas e os limites do corpo." },
+    { q: "Onde fica o atendimento?", a: "O atendimento acontece na Av. Gilka Machado, 02 - sala 304 - Recreio dos Bandeirantes, Rio de Janeiro - RJ, 22795-570." },
+    { q: "Como faço para agendar?", a: "Selecione seus serviços e envie pelo WhatsApp, ou chame diretamente no botão de contato. Você escolhe o melhor horário e recebe as orientações para a sessão." }
+  ];
+
+  const [openIdx, setOpenIdx] = useState(null);
+
+  return (
+    <section id="faq" className="py-16 md:py-24 bg-white relative">
+      <div 
+        className="absolute inset-0 opacity-[0.03] z-0 pointer-events-none" 
+        style={{ backgroundImage: `url(${GLOBAL.images.texture})`, backgroundRepeat: 'repeat' }}
+      ></div>
+
+      <div className="max-w-3xl mx-auto px-5 sm:px-6 relative z-10">
+        <div className="text-center mb-12 md:mb-14 space-y-4">
+          <span className="text-primary font-semibold tracking-wider text-sm uppercase">Dúvidas frequentes</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-stone-900 tracking-tight">
+            Antes de agendar, é natural querer entender melhor.
+          </h2>
+        </div>
+
+        <div className="space-y-4">
+          {faqs.map((faq, idx) => (
+            <Reveal key={idx} delay={idx * 100}>
+              <div className="border border-stone-200 rounded-2xl overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+                <button 
+                  onClick={() => setOpenIdx(openIdx === idx ? null : idx)}
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-stone-50 transition-colors"
+                >
+                  <span className="font-bold text-stone-800 pr-4">{faq.q}</span>
+                  {openIdx === idx ? <ChevronUp size={20} className="text-primary shrink-0"/> : <ChevronDown size={20} className="text-stone-400 shrink-0"/>}
+                </button>
+                <div 
+                  className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openIdx === idx ? 'max-h-60 py-5 opacity-100 border-t border-stone-100' : 'max-h-0 py-0 opacity-0'}`}
+                >
+                  <p className="text-stone-600 font-light leading-relaxed">{faq.a}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LocationSection() {
+  return (
+    <section id="localizacao" className="py-16 md:py-24 bg-secondary border-t border-stone-200 relative overflow-hidden">
+      
+      {/* Pattern de Grid Diagonal suave */}
+      <div className="absolute inset-0 opacity-[0.04] pattern-grid pointer-events-none"></div>
+
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 relative z-10">
+        <div className="text-center mb-12 md:mb-16 space-y-4">
+          <span className="text-primary font-semibold tracking-wider text-sm uppercase">Localização</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-stone-900 tracking-tight">
+            Atendimento no coração do Recreio dos Bandeirantes.
+          </h2>
+          <p className="text-stone-500 font-light text-lg">Um espaço privativo, acolhedor e preparado para receber você com tranquilidade.</p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 items-center bg-white rounded-3xl p-4 sm:p-8 border border-stone-200 shadow-sm">
+          
+          <div className="h-72 md:h-full min-h-[350px] w-full rounded-2xl overflow-hidden border border-stone-200 shadow-sm">
+            <iframe 
+              src={GLOBAL.mapsEmbed} 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen="" 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Mapa de Localização - Luana Brasil Massoterapeuta"
+            ></iframe>
+          </div>
+
+          <div className="space-y-10 p-4 md:p-8">
+            <div>
+              <div className="flex items-center gap-3 text-primary mb-3">
+                <MapPin size={24} />
+                <h3 className="text-xl font-serif font-bold text-stone-900">Endereço</h3>
+              </div>
+              <p className="text-stone-600 font-light leading-relaxed">Av. Gilka Machado, 02 - sala 304<br/>Recreio dos Bandeirantes<br/>Rio de Janeiro - RJ, 22795-570</p>
+            </div>
+
+            <div>
+              <div className="flex items-center gap-3 text-primary mb-3">
+                <Clock size={24} />
+                <h3 className="text-xl font-serif font-bold text-stone-900">Horários de Funcionamento</h3>
+              </div>
+              <ul className="text-stone-600 font-light space-y-2">
+                <li><strong className="font-medium text-stone-800">Segunda a Sexta:</strong> 08:00 às 19:00</li>
+                <li><strong className="font-medium text-stone-800">Sábados:</strong> 08:00 às 14:00</li>
+              </ul>
+            </div>
+
+            <div className="pt-4 flex flex-col sm:flex-row gap-4">
+              <a 
+                href={GLOBAL.mapsUrl}
+                target="_blank" rel="noopener noreferrer"
+                className="bg-white border border-stone-300 hover:border-primary text-stone-800 px-6 py-4 rounded-xl font-bold text-center transition-colors"
+              >
+                Ver no Google Maps
+              </a>
+              <a 
+                href={`https://wa.me/${GLOBAL.whatsapp}`}
+                target="_blank" rel="noopener noreferrer"
+                className="bg-[#25D366] hover:bg-[#20bd5a] text-white px-6 py-4 rounded-xl font-bold text-center transition-colors flex items-center justify-center gap-2 shadow-sm glow-wpp"
+              >
+                <MessageCircle size={18}/>
+                Chamar no WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalRoller() {
+  const items = [
+    "Sinta a leveza",
+    "Renove suas energias",
+    "Respeite seu corpo",
+    "Um tempo só seu",
+    "Cuidado que transforma",
+    "Desacelere hoje"
+  ];
+  
+  return (
+    <section className="bg-white border-y border-stone-100 py-6 overflow-hidden marquee-container">
+      <div className="animate-marquee px-8 items-center gap-16">
+        {[...items, ...items, ...items].map((item, index) => (
+          <div key={index} className="flex items-center gap-4 text-base md:text-lg font-serif tracking-wide text-stone-400">
+            <Leaf size={18} className="text-primary/50" />
+            {item}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FinalCTA() {
+  return (
+    <section 
+      className="py-24 md:py-32 bg-cover bg-center text-white text-center relative border-t-4 border-primary"
+      style={{ backgroundImage: `url(${GLOBAL.images.finalCtaBg})` }}
+    >
+      <div className="absolute inset-0 bg-stone-900/70 mix-blend-multiply"></div>
+      
+      <div className="max-w-3xl mx-auto px-5 sm:px-6 space-y-8 relative z-10">
+        <span className="text-primary font-semibold tracking-wider text-sm uppercase">Seu próximo passo</span>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight leading-tight">
+          A sua pausa <span className="text-shimmer-white">não pode esperar.</span>
+        </h2>
+        <p className="text-lg text-stone-200 font-light max-w-2xl mx-auto leading-relaxed">
+          Com a rotina cada vez mais intensa, reservar um momento para você deixou de ser um luxo e passou a ser uma necessidade para o seu corpo. Restam poucos horários na agenda desta semana. Garanta o seu.
+        </p>
+        <div className="pt-8">
+          <a 
+            href={`https://wa.me/${GLOBAL.whatsapp}?text=${encodeURIComponent('Olá, Luana! Gostaria de reservar meu momento de pausa.')}`}
+            target="_blank" rel="noopener noreferrer"
+            className="inline-flex bg-white hover:bg-stone-50 text-stone-900 px-10 py-5 rounded-xl font-bold text-lg transition-all items-center gap-3 shadow-2xl group glow-button"
+          >
+            Reservar meu horário agora
+            <span className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#25D366]"></span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <footer className="bg-[#1C1A18] text-stone-400 py-16">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6">
+        
+        <div className="mb-16 pb-12 border-b border-stone-800 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6">
+           <div>
+             <h2 className="text-2xl font-serif font-bold text-white mb-2">Acompanhe a Luana no Instagram.</h2>
+             <p className="font-light text-stone-500">Veja bastidores, dicas de autocuidado e momentos da rotina no espaço.</p>
+           </div>
+           <a 
+              href={GLOBAL.instagram} 
+              target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-stone-700 hover:border-primary hover:text-white text-stone-300 px-6 py-3 rounded-xl transition-colors font-bold"
+           >
+             <Instagram size={18}/> Seguir no Instagram
+           </a>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+          
+          <div className="space-y-4 lg:col-span-1">
+            <h3 className="text-xl font-serif font-bold text-white">Luana Brasil</h3>
+            <p className="text-sm font-light leading-relaxed text-stone-500">
+              Massoterapia no Recreio dos Bandeirantes com atendimento privativo, ambiente acolhedor e serviços voltados para relaxamento, estética corporal, bem-estar e cuidado personalizado.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-white font-bold uppercase text-xs tracking-widest">Nossos Serviços</h4>
+            <ul className="space-y-2 text-sm font-light">
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Massagem Linfática</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Massagem Desportiva</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Método Thatty Campos</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Ventosaterapia</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Massagem Terapêutica</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Massagem Relaxante</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Pós-operatório</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Massagem Modeladora</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Endermoterapia</button></li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-white font-bold uppercase text-xs tracking-widest">Contato e Endereço</h4>
+            <ul className="space-y-3 text-sm font-light">
+              <li>
+                <a href={`https://wa.me/${GLOBAL.whatsapp}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#25D366] transition-colors">
+                  <MessageCircle size={16}/> WhatsApp: (51) 98945-8454
+                </a>
+              </li>
+              <li className="flex items-start gap-2 text-stone-500 leading-relaxed pt-2">
+                <MapPin size={16} className="shrink-0 mt-1"/>
+                Av. Gilka Machado, 02 - sala 304 - Recreio dos Bandeirantes, Rio de Janeiro - RJ
+              </li>
+            </ul>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-white font-bold uppercase text-xs tracking-widest">Navegação</h4>
+            <ul className="space-y-2 text-sm font-light">
+              <li><button onClick={() => window.scrollTo(0,0)} className="hover:text-primary transition-colors">Início</button></li>
+              <li><button onClick={() => scrollTo('servicos')} className="hover:text-primary transition-colors">Serviços</button></li>
+              <li><button onClick={() => scrollTo('como_funciona')} className="hover:text-primary transition-colors">Como funciona</button></li>
+              <li><button onClick={() => scrollTo('avaliacoes')} className="hover:text-primary transition-colors">Avaliações</button></li>
+              <li><button onClick={() => scrollTo('localizacao')} className="hover:text-primary transition-colors">Localização</button></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div className="pt-8 border-t border-stone-800 text-xs text-center md:text-left font-light flex flex-col md:flex-row justify-between items-center gap-6 text-stone-500">
+          <p>© 2026 Luana Brasil Massoterapeuta. Todos os direitos reservados.</p>
+          
+          <div className="flex flex-wrap justify-center items-center gap-3">
+            <div className="flex items-center gap-1.5 text-stone-300 bg-[#2C2A28] border border-stone-700 px-3 py-1.5 rounded-lg font-medium shadow-sm">
+              <ShieldCheck size={14} className="text-primary"/> Site Seguro
+            </div>
+            <div className="flex items-center gap-1.5 text-stone-300 bg-[#2C2A28] border border-stone-700 px-3 py-1.5 rounded-lg font-medium shadow-sm">
+              <Lock size={14} className="text-primary"/> SSL Protegido
+            </div>
+          </div>
+
+          <p className="flex items-center gap-1 text-stone-400">
+            Produzido por <span className="font-bold text-stone-200">Montana</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function MobileStickyCTA({ cartCount, openCart, generateWhatsAppLink }) {
+  return (
+    <>
+      {/* Botões Flutuantes (Mobile) */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 pb-6 sm:pb-4 bg-white/95 backdrop-blur-md border-t border-stone-200 z-40 md:hidden flex gap-3 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)] items-center">
+        {cartCount > 0 && (
+          <button 
+            onClick={openCart}
+            className="flex-1 bg-stone-900 text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 relative transition-all active:scale-95 text-sm glow-button"
+          >
+            <ShoppingBag size={18} className="text-primary" />
+            Meu Agendamento
+            <span className="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-white">
+              {cartCount}
+            </span>
+          </button>
+        )}
+
+        <a 
+          href={generateWhatsAppLink()}
+          target="_blank" rel="noopener noreferrer"
+          className={`${cartCount > 0 ? 'flex-none w-14' : 'flex-1'} bg-[#25D366] text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 transition-all active:scale-95 text-sm glow-wpp`}
+          aria-label="Falar no WhatsApp"
+        >
+          <MessageCircle size={22} />
+          {cartCount === 0 && <span>Chamar no WhatsApp</span>}
+        </a>
+        
+        {cartCount === 0 && (
+          <a 
+             href={GLOBAL.instagram}
+             target="_blank" rel="noopener noreferrer"
+             className="flex-none w-12 bg-stone-100 text-stone-800 rounded-xl py-3.5 flex items-center justify-center shadow-sm"
+             aria-label="Siga no Instagram"
+          >
+            <Instagram size={20} />
+          </a>
+        )}
+      </div>
+
+      {/* Floating Icons (Desktop) */}
+      <div className="hidden md:flex fixed bottom-6 right-6 flex-col gap-4 z-40">
+        <a 
+          href={GLOBAL.instagram}
+          target="_blank" rel="noopener noreferrer"
+          className="w-14 h-14 bg-white text-stone-800 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center border border-stone-100 hover:text-primary self-end"
+          aria-label="Instagram"
+        >
+          <Instagram size={28} />
+        </a>
+        
+        <a 
+          href={generateWhatsAppLink()}
+          target="_blank" rel="noopener noreferrer"
+          className="w-14 h-14 bg-[#25D366] text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center group relative glow-wpp"
+          aria-label="Contato pelo WhatsApp"
+        >
+          <MessageCircle size={28} />
+          <span className="absolute right-16 top-1/2 -translate-y-1/2 bg-white text-stone-800 text-sm py-2 px-4 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-stone-200 pointer-events-none font-bold">
+             Conte o que seu corpo precisa hoje 👋
+          </span>
+        </a>
+      </div>
+    </>
+  );
+}
