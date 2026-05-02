@@ -65,7 +65,7 @@
     }
     .glow-wpp { animation: pulse-glow-wpp 3s infinite; }
 
-    /* Efeito Text Shimmer (Luz Passando) - CORRIGIDO e SUAVE */
+    /* Efeito Text Shimmer (Luz Passando) */
     .text-shimmer {
       background: linear-gradient(110deg, var(--color-primary) 0%, var(--color-primary) 40%, #FFF3D4 50%, var(--color-primary) 60%, var(--color-primary) 100%);
       background-size: 200% auto;
@@ -86,7 +86,7 @@
       to { background-position: -200% center; }
     }
 
-    /* Marquee (Velocidade aumentada) */
+    /* Marquee */
     @keyframes marquee {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-50%); }
@@ -95,9 +95,17 @@
       0% { transform: translateX(-50%); }
       100% { transform: translateX(0%); }
     }
-    .animate-marquee { display: inline-flex; white-space: nowrap; animation: marquee 20s linear infinite; }
-    .animate-marquee-slow { display: inline-flex; white-space: nowrap; animation: marquee 25s linear infinite; }
-    .animate-marquee-reverse { display: inline-flex; white-space: nowrap; animation: marquee-reverse 25s linear infinite; }
+    .animate-marquee { display: inline-flex; white-space: nowrap; animation: marquee 30s linear infinite; }
+    .animate-marquee-slow { display: inline-flex; white-space: nowrap; animation: marquee 35s linear infinite; }
+    .animate-marquee-reverse { display: inline-flex; white-space: nowrap; animation: marquee-reverse 35s linear infinite; }
+    
+    /* Acelera marquees no mobile em ~25% */
+    @media (max-width: 768px) {
+      .animate-marquee { animation-duration: 22.5s; }
+      .animate-marquee-slow { animation-duration: 26.25s; }
+      .animate-marquee-reverse { animation-duration: 26.25s; }
+    }
+
     .marquee-container:hover .animate-marquee,
     .marquee-container:hover .animate-marquee-slow,
     .marquee-container:hover .animate-marquee-reverse { animation-play-state: paused; }
@@ -141,7 +149,7 @@
   <header id="main-header" class="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md z-40 border-b border-stone-100 shadow-sm transition-all duration-300">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 h-[76px] flex items-center justify-between">
       <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-        <div class="font-serif text-2xl tracking-tight text-stone-900 font-bold hover:text-primary transition-colors">
+        <div class="font-serif text-xl md:text-2xl tracking-tight text-stone-900 font-bold hover:text-primary transition-colors">
           Luana Brasil
         </div>
         <div class="hidden md:block w-px h-5 bg-stone-200 mx-3"></div>
@@ -158,7 +166,7 @@
           <a href="#localizacao" class="hover:text-primary transition">Localização</a>
         </nav>
         <div class="flex items-center gap-3 lg:border-l lg:border-stone-100 lg:pl-6">
-          <button onclick="toggleCart()" class="relative bg-stone-50 hover:bg-stone-100 border border-stone-200 px-4 py-2.5 rounded-xl text-stone-700 transition-colors flex items-center gap-2 group">
+          <button onclick="toggleCart()" class="relative bg-stone-50 hover:bg-stone-100 border border-stone-200 px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-stone-700 transition-colors flex items-center gap-2 group">
             <i data-lucide="shopping-bag" class="text-primary group-hover:scale-110 transition-transform w-5 h-5"></i>
             <span class="hidden sm:block text-sm font-medium">Meu Agendamento</span>
             <span id="cart-badge-header" class="hidden absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm animate-pulse">0</span>
@@ -182,8 +190,8 @@
             Uma pausa para o seu corpo <br class="hidden md:block" />
             <span class="text-primary glow-text text-shimmer">voltar a respirar.</span>
           </h1>
-          <p class="text-lg text-stone-600 font-light leading-relaxed">
-            Atendimento personalizado no Recreio dos Bandeirantes para quem busca relaxamento, leveza e cuidado de verdade.
+          <p class="text-base md:text-lg text-stone-600 font-light leading-relaxed">
+            Relaxamento, leveza e cuidado de verdade no Recreio dos Bandeirantes.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 pt-4">
             <a href="https://wa.me/5551989458454?text=Ol%C3%A1%2C%20Luana!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20e%20saber%20os%20hor%C3%A1rios%20dispon%C3%ADveis." target="_blank" class="bg-[#25D366] hover:bg-[#20bd5a] text-white px-8 py-4 rounded-xl font-medium text-lg transition-all flex items-center justify-center gap-2 glow-wpp">
@@ -193,11 +201,10 @@
               Ver serviços disponíveis
             </a>
           </div>
-          <p class="text-xs text-stone-500 font-light tracking-wide mt-4">Atendimento privativo · Sala 304 · Av. Gilka Machado · Recreio dos Bandeirantes</p>
+          <p class="text-xs text-stone-500 font-light tracking-wide mt-4">Sala 304 · Av. Gilka Machado · Recreio dos Bandeirantes</p>
           <div class="flex flex-wrap gap-5 pt-6 text-stone-600 text-sm font-medium border-t border-stone-200/50 mt-6">
             <div class="flex items-center gap-1.5"><i data-lucide="shield" class="w-4 h-4 text-primary"></i> Ambiente seguro</div>
             <div class="flex items-center gap-1.5"><i data-lucide="star" class="w-4 h-4 text-primary"></i> Atendimento individual</div>
-            <div class="flex items-center gap-1.5"><i data-lucide="sparkles" class="w-4 h-4 text-primary"></i> Experiência sensorial</div>
           </div>
         </div>
       </div>
@@ -231,79 +238,75 @@
           </p>
         </div>
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           <!-- Card 1 -->
-          <div class="reveal min-h-[300px] perspective-1000 cursor-pointer group" onclick="toggleFlip(this)">
+          <div class="reveal min-h-[260px] md:min-h-[300px] perspective-1000 cursor-pointer group" onclick="toggleFlip(this)">
             <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner">
-              <div class="absolute inset-0 backface-hidden bg-red-50/30 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm transition-all">
-                <div class="mb-4 bg-white shadow-sm p-4 rounded-full"><i data-lucide="activity" class="text-red-400 w-8 h-8"></i></div>
-                <h3 class="text-xl md:text-2xl font-serif font-bold text-stone-900 leading-tight">Mente Acelerada</h3>
-                <p class="text-xs md:text-sm text-red-500 mt-2 font-medium bg-white px-3 py-1 rounded-full shadow-sm">Dificuldade para relaxar</p>
-                <div class="mt-auto pt-6 text-red-400 text-[10px] uppercase tracking-widest font-bold flex items-center gap-1.5 opacity-70"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Toque para virar</div>
+              <div class="absolute inset-0 backface-hidden bg-red-50/30 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm transition-all">
+                <div class="mb-3 md:mb-4 bg-white shadow-sm p-3 md:p-4 rounded-full"><i data-lucide="activity" class="text-red-400 w-6 h-6 md:w-8 md:h-8"></i></div>
+                <h3 class="text-base md:text-2xl font-serif font-bold text-stone-900 leading-tight">Mente Acelerada</h3>
+                <p class="text-[10px] md:text-sm text-red-500 mt-2 font-medium bg-white px-2 md:px-3 py-1 rounded-full shadow-sm">Dificuldade para relaxar</p>
+                <div class="mt-auto pt-4 md:pt-6 text-red-400 text-[9px] md:text-[10px] uppercase tracking-widest font-bold flex items-center gap-1 opacity-70"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Toque para virar</div>
               </div>
-              <div class="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"><i data-lucide="activity" class="text-emerald-500 w-32 h-32"></i></div>
-                <div class="relative z-10 flex flex-col h-full w-full">
-                  <div class="mb-4 opacity-70 bg-white p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto shadow-sm"><i data-lucide="activity" class="text-emerald-600 w-5 h-5"></i></div>
-                  <p class="text-emerald-900 font-medium mb-6 text-sm leading-relaxed">Uma pausa real para silenciar a mente e aliviar a tensão profunda acumulada no dia a dia.</p>
-                  <a href="#servicos" onclick="event.stopPropagation()" class="bg-emerald-600 text-white px-5 py-3 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20 flex justify-center">Quero relaxar</a>
+              <div class="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"><i data-lucide="activity" class="text-emerald-500 w-24 h-24 md:w-32 md:h-32"></i></div>
+                <div class="relative z-10 flex flex-col h-full w-full items-center">
+                  <p class="text-emerald-900 font-medium mb-auto md:mb-6 text-xs md:text-sm leading-relaxed pt-2 md:pt-4">Uma pausa real para silenciar a mente e aliviar a tensão do dia a dia.</p>
+                  <a href="#servicos" onclick="event.stopPropagation()" class="bg-emerald-600 text-white px-3 py-2 md:px-5 md:py-3 rounded-xl font-bold text-xs md:text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20 flex justify-center">Quero relaxar</a>
                 </div>
               </div>
             </div>
           </div>
           <!-- Card 2 -->
-          <div class="reveal min-h-[300px] perspective-1000 cursor-pointer group" style="transition-delay: 100ms;" onclick="toggleFlip(this)">
+          <div class="reveal min-h-[260px] md:min-h-[300px] perspective-1000 cursor-pointer group" style="transition-delay: 100ms;" onclick="toggleFlip(this)">
             <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner">
-              <div class="absolute inset-0 backface-hidden bg-red-50/30 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm transition-all">
-                <div class="mb-4 bg-white shadow-sm p-4 rounded-full"><i data-lucide="clock" class="text-red-400 w-8 h-8"></i></div>
-                <h3 class="text-xl md:text-2xl font-serif font-bold text-stone-900 leading-tight">Tensão Muscular</h3>
-                <p class="text-xs md:text-sm text-red-500 mt-2 font-medium bg-white px-3 py-1 rounded-full shadow-sm">Costas e ombros travados</p>
-                <div class="mt-auto pt-6 text-red-400 text-[10px] uppercase tracking-widest font-bold flex items-center gap-1.5 opacity-70"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Toque para virar</div>
+              <div class="absolute inset-0 backface-hidden bg-red-50/30 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm transition-all">
+                <div class="mb-3 md:mb-4 bg-white shadow-sm p-3 md:p-4 rounded-full"><i data-lucide="clock" class="text-red-400 w-6 h-6 md:w-8 md:h-8"></i></div>
+                <h3 class="text-base md:text-2xl font-serif font-bold text-stone-900 leading-tight">Tensão Muscular</h3>
+                <p class="text-[10px] md:text-sm text-red-500 mt-2 font-medium bg-white px-2 md:px-3 py-1 rounded-full shadow-sm">Costas e ombros travados</p>
+                <div class="mt-auto pt-4 md:pt-6 text-red-400 text-[9px] md:text-[10px] uppercase tracking-widest font-bold flex items-center gap-1 opacity-70"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Toque para virar</div>
               </div>
-              <div class="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"><i data-lucide="clock" class="text-emerald-500 w-32 h-32"></i></div>
-                <div class="relative z-10 flex flex-col h-full w-full">
-                  <div class="mb-4 opacity-70 bg-white p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto shadow-sm"><i data-lucide="clock" class="text-emerald-600 w-5 h-5"></i></div>
-                  <p class="text-emerald-900 font-medium mb-6 text-sm leading-relaxed">Foco em destravar ombros, cervical e lombar, devolvendo a mobilidade e o conforto.</p>
-                  <a href="#servicos" onclick="event.stopPropagation()" class="bg-emerald-600 text-white px-5 py-3 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20 flex justify-center">Aliviar minhas dores</a>
+              <div class="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"><i data-lucide="clock" class="text-emerald-500 w-24 h-24 md:w-32 md:h-32"></i></div>
+                <div class="relative z-10 flex flex-col h-full w-full items-center">
+                  <p class="text-emerald-900 font-medium mb-auto md:mb-6 text-xs md:text-sm leading-relaxed pt-2 md:pt-4">Foco em destravar ombros, cervical e lombar, devolvendo a mobilidade e o conforto.</p>
+                  <a href="#servicos" onclick="event.stopPropagation()" class="bg-emerald-600 text-white px-3 py-2 md:px-5 md:py-3 rounded-xl font-bold text-xs md:text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20 flex justify-center">Aliviar minhas dores</a>
                 </div>
               </div>
             </div>
           </div>
           <!-- Card 3 -->
-          <div class="reveal min-h-[300px] perspective-1000 cursor-pointer group" style="transition-delay: 200ms;" onclick="toggleFlip(this)">
+          <div class="reveal min-h-[260px] md:min-h-[300px] perspective-1000 cursor-pointer group" style="transition-delay: 200ms;" onclick="toggleFlip(this)">
             <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner">
-              <div class="absolute inset-0 backface-hidden bg-red-50/30 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm transition-all">
-                <div class="mb-4 bg-white shadow-sm p-4 rounded-full"><i data-lucide="feather" class="text-red-400 w-8 h-8"></i></div>
-                <h3 class="text-xl md:text-2xl font-serif font-bold text-stone-900 leading-tight">Sensação de peso</h3>
-                <p class="text-xs md:text-sm text-red-500 mt-2 font-medium bg-white px-3 py-1 rounded-full shadow-sm">Pernas cansadas e inchaço</p>
-                <div class="mt-auto pt-6 text-red-400 text-[10px] uppercase tracking-widest font-bold flex items-center gap-1.5 opacity-70"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Toque para virar</div>
+              <div class="absolute inset-0 backface-hidden bg-red-50/30 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm transition-all">
+                <div class="mb-3 md:mb-4 bg-white shadow-sm p-3 md:p-4 rounded-full"><i data-lucide="feather" class="text-red-400 w-6 h-6 md:w-8 md:h-8"></i></div>
+                <h3 class="text-base md:text-2xl font-serif font-bold text-stone-900 leading-tight">Sensação de peso</h3>
+                <p class="text-[10px] md:text-sm text-red-500 mt-2 font-medium bg-white px-2 md:px-3 py-1 rounded-full shadow-sm">Pernas cansadas e inchaço</p>
+                <div class="mt-auto pt-4 md:pt-6 text-red-400 text-[9px] md:text-[10px] uppercase tracking-widest font-bold flex items-center gap-1 opacity-70"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Toque para virar</div>
               </div>
-              <div class="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"><i data-lucide="feather" class="text-emerald-500 w-32 h-32"></i></div>
-                <div class="relative z-10 flex flex-col h-full w-full">
-                  <div class="mb-4 opacity-70 bg-white p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto shadow-sm"><i data-lucide="feather" class="text-emerald-600 w-5 h-5"></i></div>
-                  <p class="text-emerald-900 font-medium mb-6 text-sm leading-relaxed">Estímulos suaves para melhorar a circulação, reduzindo a sensação de retenção.</p>
-                  <a href="#servicos" onclick="event.stopPropagation()" class="bg-emerald-600 text-white px-5 py-3 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20 flex justify-center">Reduzir o inchaço</a>
+              <div class="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"><i data-lucide="feather" class="text-emerald-500 w-24 h-24 md:w-32 md:h-32"></i></div>
+                <div class="relative z-10 flex flex-col h-full w-full items-center">
+                  <p class="text-emerald-900 font-medium mb-auto md:mb-6 text-xs md:text-sm leading-relaxed pt-2 md:pt-4">Estímulos suaves para melhorar a circulação, reduzindo a sensação de retenção.</p>
+                  <a href="#servicos" onclick="event.stopPropagation()" class="bg-emerald-600 text-white px-3 py-2 md:px-5 md:py-3 rounded-xl font-bold text-xs md:text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20 flex justify-center">Reduzir o inchaço</a>
                 </div>
               </div>
             </div>
           </div>
           <!-- Card 4 -->
-          <div class="reveal min-h-[300px] perspective-1000 cursor-pointer group" style="transition-delay: 300ms;" onclick="toggleFlip(this)">
+          <div class="reveal min-h-[260px] md:min-h-[300px] perspective-1000 cursor-pointer group" style="transition-delay: 300ms;" onclick="toggleFlip(this)">
             <div class="relative w-full h-full transition-transform duration-700 transform-style-3d flip-inner">
-              <div class="absolute inset-0 backface-hidden bg-red-50/30 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm transition-all">
-                <div class="mb-4 bg-white shadow-sm p-4 rounded-full"><i data-lucide="heart" class="text-red-400 w-8 h-8"></i></div>
-                <h3 class="text-xl md:text-2xl font-serif font-bold text-stone-900 leading-tight">Recuperação</h3>
-                <p class="text-xs md:text-sm text-red-500 mt-2 font-medium bg-white px-3 py-1 rounded-full shadow-sm">Apoio corporal focado</p>
-                <div class="mt-auto pt-6 text-red-400 text-[10px] uppercase tracking-widest font-bold flex items-center gap-1.5 opacity-70"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Toque para virar</div>
+              <div class="absolute inset-0 backface-hidden bg-red-50/30 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center border border-red-100 shadow-sm transition-all">
+                <div class="mb-3 md:mb-4 bg-white shadow-sm p-3 md:p-4 rounded-full"><i data-lucide="heart" class="text-red-400 w-6 h-6 md:w-8 md:h-8"></i></div>
+                <h3 class="text-base md:text-2xl font-serif font-bold text-stone-900 leading-tight">Recuperação</h3>
+                <p class="text-[10px] md:text-sm text-red-500 mt-2 font-medium bg-white px-2 md:px-3 py-1 rounded-full shadow-sm">Apoio corporal focado</p>
+                <div class="mt-auto pt-4 md:pt-6 text-red-400 text-[9px] md:text-[10px] uppercase tracking-widest font-bold flex items-center gap-1 opacity-70"><i data-lucide="rotate-ccw" class="w-3 h-3"></i> Toque para virar</div>
               </div>
-              <div class="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-2xl p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
-                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"><i data-lucide="heart" class="text-emerald-500 w-32 h-32"></i></div>
-                <div class="relative z-10 flex flex-col h-full w-full">
-                  <div class="mb-4 opacity-70 bg-white p-3 rounded-full w-12 h-12 flex items-center justify-center mx-auto shadow-sm"><i data-lucide="heart" class="text-emerald-600 w-5 h-5"></i></div>
-                  <p class="text-emerald-900 font-medium mb-6 text-sm leading-relaxed">Cuidado focado para quem treina pesado ou precisa de suporte pós-operatório seguro.</p>
-                  <a href="#servicos" onclick="event.stopPropagation()" class="bg-emerald-600 text-white px-5 py-3 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20 flex justify-center">Cuidar do corpo</a>
+              <div class="absolute inset-0 backface-hidden rotate-y-180 bg-emerald-50 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center text-center border border-emerald-100 shadow-md">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10"><i data-lucide="heart" class="text-emerald-500 w-24 h-24 md:w-32 md:h-32"></i></div>
+                <div class="relative z-10 flex flex-col h-full w-full items-center">
+                  <p class="text-emerald-900 font-medium mb-auto md:mb-6 text-xs md:text-sm leading-relaxed pt-2 md:pt-4">Cuidado focado para quem treina pesado ou precisa de suporte pós-operatório seguro.</p>
+                  <a href="#servicos" onclick="event.stopPropagation()" class="bg-emerald-600 text-white px-3 py-2 md:px-5 md:py-3 rounded-xl font-bold text-xs md:text-sm hover:bg-emerald-700 transition-colors shadow-sm w-full mt-auto relative z-20 flex justify-center">Cuidar do corpo</a>
                 </div>
               </div>
             </div>
@@ -474,7 +477,6 @@
       <div class="marquee-container w-full overflow-hidden relative pb-8">
         <div class="absolute inset-y-0 left-0 w-8 md:w-32 bg-gradient-to-r from-stone-900 to-transparent z-10 pointer-events-none"></div>
         <div class="absolute inset-y-0 right-0 w-8 md:w-32 bg-gradient-to-l from-stone-900 to-transparent z-10 pointer-events-none"></div>
-        <!-- Velocidade aumentada para animação mais rápida e fluida -->
         <div class="animate-marquee flex items-stretch gap-6 px-4" id="reviews-track">
           <!-- JS fills this -->
         </div>
@@ -557,7 +559,7 @@
     </section>
 
     <!-- FINAL CTA -->
-    <section class="py-24 md:py-32 bg-cover bg-right md:bg-[center_right_15%] text-white text-center relative border-t-4 border-primary" style="background-image: url('https://res.cloudinary.com/dm9mnc97u/image/upload/v1777694701/a28da448-0417-43fb-a985-2393ad059c08_jldmbv.png')">
+    <section class="py-24 md:py-32 bg-cover bg-[85%_center] md:bg-[center_right_15%] text-white text-center relative border-t-4 border-primary" style="background-image: url('https://res.cloudinary.com/dm9mnc97u/image/upload/v1777694701/a28da448-0417-43fb-a985-2393ad059c08_jldmbv.png')">
       <div class="absolute inset-0 bg-stone-900/70 mix-blend-multiply"></div>
       <div class="reveal max-w-3xl mx-auto px-5 sm:px-6 space-y-8 relative z-10">
         <span class="text-primary font-semibold tracking-wider text-sm uppercase">Seu próximo passo</span>
@@ -631,31 +633,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- MOBILE STICKY CTA -->
-  <div class="fixed bottom-0 left-0 right-0 p-4 pb-6 sm:pb-4 bg-white/95 backdrop-blur-md border-t border-stone-200 z-40 md:hidden flex gap-3 shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.05)] items-center">
-    <button id="mobile-cart-btn" onclick="toggleCart()" class="hidden flex-1 bg-stone-900 text-white rounded-xl py-3.5 font-bold items-center justify-center gap-2 relative transition-all active:scale-95 text-sm glow-button">
-      <i data-lucide="shopping-bag" class="w-4 h-4 text-primary"></i> Meu Agendamento
-      <span id="mobile-cart-badge" class="absolute -top-1.5 -right-1.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-white">0</span>
-    </button>
-    <a id="mobile-wpp-btn" href="https://wa.me/5551989458454" target="_blank" class="flex-1 bg-[#25D366] text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 transition-all active:scale-95 text-sm glow-wpp">
-      <i data-lucide="message-circle" class="w-5 h-5"></i> <span id="mobile-wpp-text">Chamar no WhatsApp</span>
-    </a>
-    <a id="mobile-ig-btn" href="https://www.instagram.com/massoterapeuta_lubrasil/" target="_blank" class="flex-none w-12 bg-stone-100 text-stone-800 rounded-xl py-3.5 flex items-center justify-center shadow-sm">
-      <i data-lucide="instagram" class="w-5 h-5"></i>
-    </a>
-  </div>
-
-  <!-- FLOATING ICONS DESKTOP -->
-  <div class="hidden md:flex fixed bottom-6 right-6 flex-col gap-4 z-40">
-    <a href="https://www.instagram.com/massoterapeuta_lubrasil/" target="_blank" class="w-14 h-14 bg-white text-stone-800 rounded-full shadow-lg hover:scale-110 transition-transform flex items-center justify-center border border-stone-100 hover:text-primary self-end">
-      <i data-lucide="instagram" class="w-6 h-6"></i>
-    </a>
-    <a id="desktop-wpp-btn" href="https://wa.me/5551989458454" target="_blank" class="w-14 h-14 bg-[#25D366] text-white rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center group relative glow-wpp">
-      <i data-lucide="message-circle" class="w-7 h-7"></i>
-      <span class="absolute right-16 top-1/2 -translate-y-1/2 bg-white text-stone-800 text-sm py-2 px-4 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap border border-stone-200 pointer-events-none font-bold">Conte o que seu corpo precisa hoje 👋</span>
-    </a>
-  </div>
 
   <!-- CART DRAWER -->
   <div id="cart-overlay" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm z-50 transition-opacity opacity-0 pointer-events-none" onclick="toggleCart()"></div>
@@ -750,7 +727,7 @@
       { q: "Posso escolher mais de um serviço?", a: "Sim. Você pode selecionar mais de um serviço no site e enviar seu resumo pelo WhatsApp. Luana avalia se a combinação faz sentido para o seu momento." },
       { q: "Pós-operatório precisa de liberação médica?", a: "Sim, quando necessário. O atendimento pós-operatório respeita a fase de recuperação, as orientações médicas e os limites do corpo." },
       { q: "Onde fica o atendimento?", a: "O atendimento acontece na Av. Gilka Machado, 02 - sala 304 - Recreio dos Bandeirantes, Rio de Janeiro - RJ, 22795-570." },
-      { q: "Como faço para agendar?", a: "Selecione seus serviços e envie pelo WhatsApp, ou chame diretamente no botão de contato. Você escolhe o melhor horário e recebe as orientações para a sessão." }
+      { q: "Como faço para agendar?", a: "Selecione seus serviços e envie pelo WhatsApp. Você escolhe o melhor horário e recebe as orientações para a sessão." }
     ];
 
     let cart = [];
@@ -769,21 +746,18 @@
 
     // --- PRELOADER & REVEAL ANIMATIONS ---
     document.addEventListener("DOMContentLoaded", () => {
-      // 1. Render all dynamic content FIRST so it gets captured by the observer
       renderServices();
       renderReviews();
       renderFAQ();
       renderQuiz();
       lucide.createIcons();
 
-      // 2. Hide preloader
       setTimeout(() => {
         const preloader = document.getElementById('preloader');
         preloader.classList.add('opacity-0');
         setTimeout(() => preloader.style.display = 'none', 500);
       }, 2000);
 
-      // 3. Initialize Reveal Observer
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -793,12 +767,11 @@
         });
       }, { threshold: 0.1 });
       
-      // We wrap the observation in a slight timeout to ensure DOM is fully ready
       setTimeout(() => {
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
       }, 100);
 
-      // 4. Initialize Step Card "Lighting up" on scroll
+      // Initialize Step Card "Lighting up" on scroll
       const stepObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -815,7 +788,6 @@
       }, { threshold: 0.6, rootMargin: "0px 0px -10% 0px" });
       document.querySelectorAll('.step-card').forEach(el => stepObserver.observe(el));
 
-      // 5. Initialize Counters
       const countObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -949,34 +921,19 @@
     function clearCart() { cart = []; updateCartUI(); }
 
     function updateCartUI() {
-      // Re-render services to update button states
       renderServices();
-      
-      // Update badges
       const headerBadge = document.getElementById('cart-badge-header');
-      const mobileBadge = document.getElementById('mobile-cart-badge');
-      const mobileBtn = document.getElementById('mobile-cart-btn');
-      const mobileWppBtn = document.getElementById('mobile-wpp-btn');
-      const mobileWppText = document.getElementById('mobile-wpp-text');
 
       if (cart.length > 0) {
         headerBadge.classList.remove('hidden'); headerBadge.innerText = cart.length;
-        mobileBtn.classList.remove('hidden'); mobileBtn.classList.add('flex'); mobileBadge.innerText = cart.length;
-        mobileWppBtn.className = "flex-none w-14 bg-[#25D366] text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 transition-all active:scale-95 text-sm glow-wpp";
-        mobileWppText.classList.add('hidden');
       } else {
         headerBadge.classList.add('hidden');
-        mobileBtn.classList.add('hidden'); mobileBtn.classList.remove('flex');
-        mobileWppBtn.className = "flex-1 bg-[#25D366] text-white rounded-xl py-3.5 font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/30 transition-all active:scale-95 text-sm glow-wpp";
-        mobileWppText.classList.remove('hidden');
       }
 
-      // Update Drawer
       const emptyState = document.getElementById('cart-empty');
       const filledState = document.getElementById('cart-filled');
       const list = document.getElementById('cart-list');
       const wppBtn = document.getElementById('cart-wpp-btn');
-      const desktopWppBtn = document.getElementById('desktop-wpp-btn');
 
       if (cart.length > 0) {
         emptyState.classList.add('hidden'); filledState.classList.remove('hidden');
@@ -988,15 +945,10 @@
         `).join('');
         wppBtn.className = "w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all bg-[#25D366] hover:bg-[#20bd5a] text-white shadow-lg shadow-[#25D366]/20 glow-wpp";
         wppBtn.onclick = () => { window.open(formatWhatsAppMessage(), '_blank'); };
-        desktopWppBtn.href = formatWhatsAppMessage();
-        mobileWppBtn.href = formatWhatsAppMessage();
       } else {
         emptyState.classList.remove('hidden'); filledState.classList.add('hidden');
         wppBtn.className = "w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all bg-stone-100 text-stone-400 cursor-not-allowed";
         wppBtn.onclick = (e) => { e.preventDefault(); };
-        const defaultWpp = `https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent('Olá, Luana! Gostaria de agendar uma avaliação e saber os horários disponíveis.')}`;
-        desktopWppBtn.href = defaultWpp;
-        mobileWppBtn.href = defaultWpp;
       }
       lucide.createIcons();
     }
@@ -1020,7 +972,6 @@
       setTimeout(() => { document.getElementById('servicos').scrollIntoView({ behavior: 'smooth' }); }, 300);
     }
 
-    // Input objective listener
     document.getElementById('cart-objective').addEventListener('input', (e) => {
       updateCartUI(); 
     });
