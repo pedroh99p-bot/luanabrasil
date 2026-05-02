@@ -86,7 +86,7 @@
       to { background-position: -200% center; }
     }
 
-    /* Marquee */
+    /* Marquee (Velocidade aumentada) */
     @keyframes marquee {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-50%); }
@@ -95,9 +95,9 @@
       0% { transform: translateX(-50%); }
       100% { transform: translateX(0%); }
     }
-    .animate-marquee { display: inline-flex; white-space: nowrap; animation: marquee 30s linear infinite; }
-    .animate-marquee-slow { display: inline-flex; white-space: nowrap; animation: marquee 35s linear infinite; }
-    .animate-marquee-reverse { display: inline-flex; white-space: nowrap; animation: marquee-reverse 35s linear infinite; }
+    .animate-marquee { display: inline-flex; white-space: nowrap; animation: marquee 20s linear infinite; }
+    .animate-marquee-slow { display: inline-flex; white-space: nowrap; animation: marquee 25s linear infinite; }
+    .animate-marquee-reverse { display: inline-flex; white-space: nowrap; animation: marquee-reverse 25s linear infinite; }
     .marquee-container:hover .animate-marquee,
     .marquee-container:hover .animate-marquee-slow,
     .marquee-container:hover .animate-marquee-reverse { animation-play-state: paused; }
@@ -180,10 +180,10 @@
           </span>
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-stone-900 leading-[1.1] tracking-tight">
             Uma pausa para o seu corpo <br class="hidden md:block" />
-            <span class="text-shimmer">voltar a respirar.</span>
+            <span class="text-primary glow-text text-shimmer">voltar a respirar.</span>
           </h1>
           <p class="text-lg text-stone-600 font-light leading-relaxed">
-            Massoterapia em ambiente acolhedor e elegante no Recreio dos Bandeirantes, com atendimento personalizado para quem busca relaxamento, leveza, equilíbrio e cuidado de verdade.
+            Atendimento personalizado no Recreio dos Bandeirantes para quem busca relaxamento, leveza e cuidado de verdade.
           </p>
           <div class="flex flex-col sm:flex-row gap-4 pt-4">
             <a href="https://wa.me/5551989458454?text=Ol%C3%A1%2C%20Luana!%20Gostaria%20de%20agendar%20uma%20avalia%C3%A7%C3%A3o%20e%20saber%20os%20hor%C3%A1rios%20dispon%C3%ADveis." target="_blank" class="bg-[#25D366] hover:bg-[#20bd5a] text-white px-8 py-4 rounded-xl font-medium text-lg transition-all flex items-center justify-center gap-2 glow-wpp">
@@ -225,7 +225,7 @@
       <div class="max-w-6xl mx-auto relative z-10">
         <div class="reveal text-center mb-12 md:mb-16 space-y-4">
           <span class="text-primary font-semibold tracking-wider text-sm uppercase">Seu corpo também pede pausa</span>
-          <h2 class="text-3xl md:text-5xl lg:text-6xl font-serif font-bold text-stone-900 tracking-tight">Quando a rotina pesa, o corpo sente primeiro.</h2>
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-stone-900 tracking-tight">Quando a rotina pesa, o corpo sente primeiro.</h2>
           <p class="text-stone-500 max-w-3xl mx-auto text-base md:text-lg font-light leading-relaxed">
             Ombros tensos, pernas pesadas, mente acelerada e aquela sensação de estar sempre carregando mais do que deveria. A massoterapia é um convite para desacelerar.
           </p>
@@ -311,7 +311,7 @@
         </div>
         
         <div class="reveal text-center mt-12 md:mt-16" style="transition-delay: 400ms;">
-          <a href="#quiz" class="inline-flex bg-stone-900 hover:bg-stone-800 text-white px-8 py-4 rounded-xl font-bold text-base md:text-lg transition-colors shadow-md">
+          <a href="#quiz" class="inline-flex bg-stone-900 hover:bg-stone-800 text-white px-8 py-4 rounded-xl font-bold text-base md:text-lg transition-colors shadow-md glow-button">
             Quero entender qual cuidado combina comigo
           </a>
         </div>
@@ -326,21 +326,21 @@
     </div>
 
     <!-- SPECIALIST SECTION -->
-    <section id="sobre" class="py-16 md:py-24 bg-stone-900 text-white relative overflow-hidden">
-      <div class="max-w-6xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
-        <div class="reveal order-2 md:order-1 relative max-w-md mx-auto w-full">
-           <div class="aspect-[3/4] rounded-2xl overflow-hidden border-4 border-stone-800 shadow-2xl bg-stone-800 flex items-center justify-center relative">
+    <section id="sobre" class="py-12 md:py-16 bg-stone-900 text-white relative overflow-hidden">
+      <div class="max-w-6xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
+        <div class="reveal order-2 md:order-1 relative max-w-[280px] md:max-w-xs lg:max-w-sm mx-auto w-full">
+           <div class="aspect-square md:aspect-[4/5] rounded-2xl overflow-hidden border-4 border-stone-800 shadow-2xl bg-stone-800 flex items-center justify-center relative">
              <img src="https://res.cloudinary.com/dm9mnc97u/image/upload/v1777694630/0cadc182-6847-4ef1-8b94-07f6d31f22e9_zgqjbn.png" alt="Luana Brasil Massoterapeuta" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity" loading="lazy">
              <div class="absolute inset-0 bg-gradient-to-t from-stone-900/80 via-transparent to-transparent"></div>
            </div>
         </div>
         <div class="reveal space-y-6 order-1 md:order-2">
           <span class="text-primary font-bold tracking-widest text-sm uppercase">A Especialista</span>
-          <h2 class="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight tracking-tight">Luana Brasil</h2>
-          <div class="text-stone-300 font-light text-base md:text-lg leading-relaxed">
+          <h2 class="text-4xl md:text-5xl font-serif font-bold leading-tight tracking-tight">Luana Brasil</h2>
+          <div class="text-stone-300 font-light text-base leading-relaxed">
             <p>Com atendimento exclusivo no Recreio dos Bandeirantes, Luana oferece uma experiência onde a técnica profunda e a escuta ativa caminham juntas. O foco de cada sessão não é aplicar um protocolo engessado, mas entregar um cuidado personalizado e acolhedor que alivia dores reais, reduz o estresse acumulado e devolve a leveza e a mobilidade que a sua rotina exige.</p>
           </div>
-          <ul class="space-y-3 pt-4">
+          <ul class="space-y-3 pt-2">
             <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-primary w-5 h-5 shrink-0"></i><span class="text-stone-200 font-medium text-sm md:text-base">Atendimento privativo, seguro e acolhedor</span></li>
             <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-primary w-5 h-5 shrink-0"></i><span class="text-stone-200 font-medium text-sm md:text-base">Escuta ativa antes da aplicação da técnica</span></li>
             <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-primary w-5 h-5 shrink-0"></i><span class="text-stone-200 font-medium text-sm md:text-base">Experiência sensorial completa de bem-estar</span></li>
@@ -387,30 +387,32 @@
     <section id="como_funciona" class="py-16 md:py-24 bg-stone-50 border-t border-stone-200 relative overflow-hidden">
       <div class="absolute inset-0 opacity-[0.05] pattern-dots pointer-events-none"></div>
       <div class="max-w-6xl mx-auto px-5 sm:px-6 relative z-10">
-        <div class="reveal text-center mb-12 md:mb-20 space-y-4">
+        <div class="text-center mb-12 md:mb-20 space-y-4">
           <span class="text-primary font-semibold tracking-wider text-sm uppercase">Como funciona</span>
           <h2 class="text-3xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight">Do primeiro contato à sessão, tudo com calma.</h2>
         </div>
+        
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 relative">
-          <div class="hidden md:block absolute top-10 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-primary/40 to-transparent -z-0"></div>
+          <!-- Linha conectora apenas no desktop -->
+          <div class="hidden md:block absolute top-10 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-stone-300 to-transparent -z-0"></div>
           
-          <div class="reveal relative z-10 flex flex-col items-center text-center">
-            <div class="w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-primary mb-6 shadow-sm hover:shadow-md transition-shadow">01</div>
+          <div class="step-card opacity-30 translate-y-10 transition-all duration-700 ease-out relative z-10 flex flex-col items-center text-center">
+            <div class="step-icon w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-stone-400 mb-6 shadow-sm transition-all duration-700">01</div>
             <h3 class="text-lg font-bold text-stone-900 mb-3 px-2">Você chama no WhatsApp</h3>
             <p class="text-stone-500 font-light leading-relaxed text-sm">Conte o que está sentindo ou qual experiência procura.</p>
           </div>
-          <div class="reveal relative z-10 flex flex-col items-center text-center" style="transition-delay: 150ms;">
-            <div class="w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-primary mb-6 shadow-sm hover:shadow-md transition-shadow">02</div>
+          <div class="step-card opacity-30 translate-y-10 transition-all duration-700 ease-out relative z-10 flex flex-col items-center text-center">
+            <div class="step-icon w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-stone-400 mb-6 shadow-sm transition-all duration-700">02</div>
             <h3 class="text-lg font-bold text-stone-900 mb-3 px-2">Luana entende seu momento</h3>
             <p class="text-stone-500 font-light leading-relaxed text-sm">Antes de indicar qualquer serviço, ela escuta sua necessidade.</p>
           </div>
-          <div class="reveal relative z-10 flex flex-col items-center text-center" style="transition-delay: 300ms;">
-            <div class="w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-primary mb-6 shadow-sm hover:shadow-md transition-shadow">03</div>
+          <div class="step-card opacity-30 translate-y-10 transition-all duration-700 ease-out relative z-10 flex flex-col items-center text-center">
+            <div class="step-icon w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-stone-400 mb-6 shadow-sm transition-all duration-700">03</div>
             <h3 class="text-lg font-bold text-stone-900 mb-3 px-2">Você agenda seu horário</h3>
             <p class="text-stone-500 font-light leading-relaxed text-sm">O atendimento é individual, privativo e com hora marcada.</p>
           </div>
-          <div class="reveal relative z-10 flex flex-col items-center text-center" style="transition-delay: 450ms;">
-            <div class="w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-primary mb-6 shadow-sm hover:shadow-md transition-shadow">04</div>
+          <div class="step-card opacity-30 translate-y-10 transition-all duration-700 ease-out relative z-10 flex flex-col items-center text-center">
+            <div class="step-icon w-20 h-20 rounded-2xl bg-white border border-stone-200 flex items-center justify-center text-2xl font-serif text-stone-400 mb-6 shadow-sm transition-all duration-700">04</div>
             <h3 class="text-lg font-bold text-stone-900 mb-3 px-2">Sua sessão vira pausa real</h3>
             <p class="text-stone-500 font-light leading-relaxed text-sm">Um momento para desacelerar e receber cuidado com presença.</p>
           </div>
@@ -428,7 +430,7 @@
     <!-- QUIZ SECTION -->
     <section id="quiz" class="py-16 md:py-24 bg-white border-y border-stone-200 relative">
       <div class="absolute inset-0 opacity-[0.05] pattern-grid pointer-events-none"></div>
-      <div class="max-w-3xl mx-auto px-5 sm:px-6 relative z-10 reveal" id="quiz-container">
+      <div class="max-w-3xl mx-auto px-5 sm:px-6 relative z-10 transition-all duration-300 ease-in-out transform" id="quiz-container">
         <!-- Renderizado via JS -->
       </div>
     </section>
@@ -473,7 +475,7 @@
         <div class="absolute inset-y-0 left-0 w-8 md:w-32 bg-gradient-to-r from-stone-900 to-transparent z-10 pointer-events-none"></div>
         <div class="absolute inset-y-0 right-0 w-8 md:w-32 bg-gradient-to-l from-stone-900 to-transparent z-10 pointer-events-none"></div>
         <!-- Velocidade aumentada para animação mais rápida e fluida -->
-        <div class="animate-marquee-slow flex items-stretch gap-6 px-4" id="reviews-track">
+        <div class="animate-marquee flex items-stretch gap-6 px-4" id="reviews-track">
           <!-- JS fills this -->
         </div>
       </div>
@@ -555,7 +557,7 @@
     </section>
 
     <!-- FINAL CTA -->
-    <section class="py-24 md:py-32 bg-cover bg-center text-white text-center relative border-t-4 border-primary" style="background-image: url('https://res.cloudinary.com/dm9mnc97u/image/upload/v1777694701/a28da448-0417-43fb-a985-2393ad059c08_jldmbv.png')">
+    <section class="py-24 md:py-32 bg-cover bg-right md:bg-[center_right_15%] text-white text-center relative border-t-4 border-primary" style="background-image: url('https://res.cloudinary.com/dm9mnc97u/image/upload/v1777694701/a28da448-0417-43fb-a985-2393ad059c08_jldmbv.png')">
       <div class="absolute inset-0 bg-stone-900/70 mix-blend-multiply"></div>
       <div class="reveal max-w-3xl mx-auto px-5 sm:px-6 space-y-8 relative z-10">
         <span class="text-primary font-semibold tracking-wider text-sm uppercase">Seu próximo passo</span>
@@ -796,7 +798,24 @@
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
       }, 100);
 
-      // 4. Initialize Counters
+      // 4. Initialize Step Card "Lighting up" on scroll
+      const stepObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.remove('opacity-30', 'translate-y-10');
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            const icon = entry.target.querySelector('.step-icon');
+            if(icon) {
+              icon.classList.remove('text-stone-400', 'border-stone-200');
+              icon.classList.add('text-primary', 'border-primary', 'shadow-lg', 'shadow-primary/30', 'scale-110');
+            }
+            stepObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.6, rootMargin: "0px 0px -10% 0px" });
+      document.querySelectorAll('.step-card').forEach(el => stepObserver.observe(el));
+
+      // 5. Initialize Counters
       const countObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -1006,15 +1025,17 @@
       updateCartUI(); 
     });
 
-    // --- QUIZ LOGIC ---
+    // --- QUIZ LOGIC WITH SMOOTH FADES ---
     function renderQuiz() {
       const container = document.getElementById('quiz-container');
+      
+      let html = '';
       if (quizStep <= QUIZ_QUESTIONS.length) {
         const q = QUIZ_QUESTIONS[quizStep - 1];
-        container.innerHTML = `
-          <div class="bg-white p-6 md:p-12 rounded-3xl shadow-lg shadow-stone-200/50 border border-stone-100 animate-fade-in-up">
+        html = `
+          <div class="bg-white p-6 md:p-12 rounded-3xl shadow-lg shadow-stone-200/50 border border-stone-100">
             <div class="mb-8 relative">
-              ${quizStep > 1 ? `<button onclick="quizStep--; renderQuiz()" class="absolute left-0 top-1/2 -translate-y-1/2 text-stone-400 hover:text-primary transition-colors flex items-center gap-1 text-sm font-medium"><i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar</button>` : ''}
+              ${quizStep > 1 ? `<button onclick="goBackQuiz()" class="absolute left-0 top-1/2 -translate-y-1/2 text-stone-400 hover:text-primary transition-colors flex items-center gap-1 text-sm font-medium"><i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar</button>` : ''}
               <div class="text-center text-xs text-stone-400 mb-3 font-bold uppercase tracking-widest"><span>Pergunta ${quizStep} de ${QUIZ_QUESTIONS.length}</span></div>
               <div class="w-full max-w-xs mx-auto bg-stone-100 h-1.5 rounded-full overflow-hidden">
                 <div class="bg-primary h-full transition-all duration-500 ease-out" style="width: ${(quizStep / QUIZ_QUESTIONS.length) * 100}%"></div>
@@ -1038,8 +1059,8 @@
           </div>
         `).join('');
 
-        container.innerHTML = `
-          <div class="bg-white p-6 md:p-12 rounded-3xl shadow-lg border border-stone-100 text-center animate-fade-in-up">
+        html = `
+          <div class="bg-white p-6 md:p-12 rounded-3xl shadow-lg border border-stone-100 text-center">
             <div class="w-16 h-16 md:w-20 md:h-20 bg-secondary text-primary rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-stone-200"><i data-lucide="sparkles" class="w-8 h-8 md:w-10 md:h-10"></i></div>
             <h2 class="text-3xl md:text-4xl font-serif font-bold text-stone-900 mb-4">Seu resumo está pronto</h2>
             <p class="text-stone-500 mb-8 max-w-lg mx-auto font-light text-lg">Suas respostas já foram salvas. Baseado no seu momento atual, estes são os cuidados recomendados para você.</p>
@@ -1054,19 +1075,49 @@
             <button onclick="resetQuiz()" class="mt-8 text-sm text-stone-400 hover:text-primary transition-colors font-medium"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5 inline mr-1"></i> Refazer guia</button>
           </div>`;
       }
+      container.innerHTML = html;
       lucide.createIcons();
     }
 
     function handleQuizAnswer(optIndex) {
-      const q = QUIZ_QUESTIONS[quizStep - 1];
-      quizAnswers[quizStep] = q.options[optIndex];
-      if (quizStep === QUIZ_QUESTIONS.length) {
-        const summary = `*Minhas respostas do Guia Rápido:*\n1. Desconforto: ${quizAnswers[1].text}\n2. Toque: ${quizAnswers[2].text}\n3. Desejo final: ${quizAnswers[3].text}\n4. Nível de tensão: ${quizAnswers[4].text}\n5. Frequência: ${quizAnswers[5].text}`;
-        document.getElementById('cart-objective').value = summary;
-        updateCartUI();
+      const container = document.getElementById('quiz-container');
+      container.classList.add('opacity-0', 'translate-y-4');
+      
+      setTimeout(() => {
+        const q = QUIZ_QUESTIONS[quizStep - 1];
+        quizAnswers[quizStep] = q.options[optIndex];
+        if (quizStep === QUIZ_QUESTIONS.length) {
+          const summary = `*Minhas respostas do Guia Rápido:*\n1. Desconforto: ${quizAnswers[1].text}\n2. Toque: ${quizAnswers[2].text}\n3. Desejo final: ${quizAnswers[3].text}\n4. Nível de tensão: ${quizAnswers[4].text}\n5. Frequência: ${quizAnswers[5].text}`;
+          document.getElementById('cart-objective').value = summary;
+          updateCartUI();
+        }
+        quizStep++;
+        renderQuiz();
+        setTimeout(() => container.classList.remove('opacity-0', 'translate-y-4'), 50);
+      }, 300);
+    }
+
+    function goBackQuiz() {
+      if(quizStep > 1) {
+        const container = document.getElementById('quiz-container');
+        container.classList.add('opacity-0', '-translate-y-4');
+        setTimeout(() => {
+          quizStep--;
+          renderQuiz();
+          setTimeout(() => container.classList.remove('opacity-0', '-translate-y-4'), 50);
+        }, 300);
       }
-      quizStep++;
-      renderQuiz();
+    }
+
+    function resetQuiz() { 
+      const container = document.getElementById('quiz-container');
+      container.classList.add('opacity-0');
+      setTimeout(() => {
+        quizStep = 1; 
+        quizAnswers = {}; 
+        renderQuiz(); 
+        setTimeout(() => container.classList.remove('opacity-0'), 50);
+      }, 300);
     }
 
     function getQuizRecommendations() {
@@ -1084,8 +1135,6 @@
       recs.forEach(rec => addToCart(rec));
       toggleCart(true);
     }
-
-    function resetQuiz() { quizStep = 1; quizAnswers = {}; renderQuiz(); }
 
     // --- REVIEWS ---
     const googleSvg = `<svg class="w-5 h-5 flex-shrink-0 bg-white rounded-full p-0.5 shadow-sm" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>`;
